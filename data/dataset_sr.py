@@ -2,6 +2,8 @@ import random
 import numpy as np
 import torch.utils.data as data
 import utils.utils_image as util
+import cv2
+import os
 
 
 class DatasetSR(data.Dataset):
@@ -25,12 +27,25 @@ class DatasetSR(data.Dataset):
         # ------------------------------------
         # get paths of L/H
         # ------------------------------------
-        self.paths_H = util.get_image_paths(opt['dataroot_H'])
-        self.paths_L = util.get_image_paths(opt['dataroot_L'])
+        if opt['dataroot_H2'] != None:
+            self.paths_H = util.get_image_paths(opt['dataroot_H']) + util.get_image_paths(opt['dataroot_H2'])
+            self.paths_L = util.get_image_paths(opt['dataroot_L']) + util.get_image_paths(opt['dataroot_L2'])
+        else:
+            self.paths_H = util.get_image_paths(opt['dataroot_H'])
+            self.paths_L = util.get_image_paths(opt['dataroot_L'])
+
+        self.paths = np.array(tuple(zip(self.paths_H, self.paths_L)))
+        np.random.shuffle(self.paths)
+        self.paths_H = self.paths[:, 0].tolist()
+        self.paths_L = self.paths[:, 1].tolist()
 
         assert self.paths_H, 'Error: H path is empty.'
         if self.paths_L and self.paths_H:
             assert len(self.paths_L) == len(self.paths_H), 'L/H mismatch - {}, {}.'.format(len(self.paths_L), len(self.paths_H))
+            # \
+            #                                                            '\n self.paths_L = {} ' \
+            #                                                            '\n self.paths_H = {}
+            # self.paths_L, self.paths_H
 
     def __getitem__(self, index):
 
@@ -39,8 +54,20 @@ class DatasetSR(data.Dataset):
         # get H image
         # ------------------------------------
         H_path = self.paths_H[index]
-        img_H = util.imread_uint(H_path, self.n_channels)
-        img_H = util.uint2single(img_H)
+        # img_H = util.imread_uint(H_path, self.n_channels)
+        img_H = cv2.imread(H_path, cv2.IMREAD_ANYCOLOR | cv2.IMREAD_ANYDEPTH)   # ADDED THIS LINE
+        # img_H = util.uint2single(img_H)   # This converts from 0-255 to 0-1.0
+        
+        # I WROTE THIS PART
+        # Gets rid of the full black images
+        while (os.path.getsize(H_path)<500000):
+            del self.paths_H[index]
+            del self.paths_L[index]
+            try:
+                H_path = self.paths_H[index]
+            except IndexError:
+                H_path = self.paths_H[index-1]
+                break
 
         # ------------------------------------
         # modcrop
@@ -54,9 +81,16 @@ class DatasetSR(data.Dataset):
             # --------------------------------
             # directly load L image
             # --------------------------------
-            L_path = self.paths_L[index]
-            img_L = util.imread_uint(L_path, self.n_channels)
-            img_L = util.uint2single(img_L)
+            try:
+                L_path = self.paths_L[index]
+            except IndexError:
+                L_path = self.paths_L[index-1]
+            
+                
+            # L_path = self.paths_L[index]
+            # img_L = util.imread_uint(L_path, self.n_channels)
+            img_L = cv2.imread(L_path, cv2.IMREAD_ANYCOLOR | cv2.IMREAD_ANYDEPTH)     # ADDED THIS LINE
+            # img_L = util.uint2single(img_L)     # This converts from 0-255 to 0-1.0
 
         else:
             # --------------------------------
