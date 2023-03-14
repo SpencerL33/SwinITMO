@@ -2,9 +2,9 @@ import random
 import numpy as np
 import torch.utils.data as data
 import utils.utils_image as util
-import cv2
 import os
-
+os.environ["OPENCV_IO_ENABLE_OPENEXR"] = "1"
+import cv2
 
 class DatasetSR(data.Dataset):
     '''
