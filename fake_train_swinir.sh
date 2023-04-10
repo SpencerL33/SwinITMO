@@ -16,8 +16,7 @@ module load gcc opencv
 
 nvidia-smi
 
-
-source  ~/ENV1/bin/activate
+source ./ENV/bin/activate
 
 cd ~
 
