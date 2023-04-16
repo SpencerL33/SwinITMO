@@ -7,5 +7,4 @@ virtualenv --no-download ENV
 source ENV/bin/activate
 pip install --no-index --upgrade pip
 pip install numpy --no-index
-cd KAIR
 pip install -r requirement.txt

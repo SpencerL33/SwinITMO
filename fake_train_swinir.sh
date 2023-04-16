@@ -23,7 +23,7 @@ cd ~
 echo "Testing..."
 
 
-python ~/KAIR/main_train_psnr.py --opt ~/KAIR/options/swinir/train_swinir_hdr_v2.json
+python ~/main_train_psnr.py --opt ~/options/swinir/train_swinir_hdr_v2.json
 
 
 
