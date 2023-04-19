@@ -79,6 +79,13 @@ def define_Dataset(dataset_opt):
 
 
     # -----------------------------------------
+    # ITMO
+    # -----------------------------------------
+    elif dataset_type in ['itmo', 'hdr']:
+        from data.dataset_itmo import DatasetSR as D
+    
+    
+    # -----------------------------------------
     # common
     # -----------------------------------------
     elif dataset_type in ['plain']:
