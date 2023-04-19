@@ -1,14 +1,14 @@
 {
-  "task": "swinir_sr_classical_patch48_x2"     //  classical image sr for x2/x3/x4/x8. root/task/images-models-options
+  "task": "iTMO"     //  classical image sr for x2/x3/x4/x8. root/task/images-models-options
   , "model": "plain" // "plain" | "plain2" if two inputs
-  , "gpu_ids": [0,1,2,3,4,5,6,7]
+  , "gpu_ids": [0,1,2,3]	//[0,1,2,3,4,5,6,7]
   , "dist": true
 
   , "scale": 1       // 2 | 3 | 4 | 8
   , "n_channels": 3  // broadcast to "datasets", 1 for grayscale, 3 for color
 
   , "path": {
-    "root": "superresolution"            // "denoising" | "superresolution" | "dejpeg"
+    "root": "SwinITMO_v2"            // "denoising" | "superresolution" | "dejpeg"
     , "pretrained_netG": null      // path of pretrained model. We fine-tune X3/X4/X8 models from X2 model, so that `G_optimizer_lr` and `G_scheduler_milestones` can be halved to save time.
     , "pretrained_netE": null      // path of pretrained model
   }
@@ -16,25 +16,20 @@
   , "datasets": {
     "train": {
       "name": "train_dataset"           // just name
-      , "dataset_type": "sr"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "jpeg"
-      , "dataroot_H": "/lustre06/project/6003167/SharedProject4Kto8K_SDRfixedReinhard/4K_Stelios"// path of H training dataset. DIV2K (800 training images)
-      , "dataroot_L": "/lustre06/project/6003167/Share_4K8K/4K_PQ_EXR"              // path of L training dataset
-	  , "dataroot_H2": "/lustre06/project/6003167/shared_itmo_fixed/Garden/HDR"
-	  , "dataroot_L2": "/lustre06/project/6003167/shared_itmo_fixed/Garden/SDR"
+	  , "dataset_type": "itmo"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "jpeg"
+	  , "dataroot": "/home/slee67/KAIR/train_itmo_dirs.txt"
 
-      , "H_size": 256                   // 96/144|192/384 | 128/192/256/512. LR patch size is set to 48 or 64 when compared with RCAN or RRDB.
+      , "H_size": 64                   // 96/144|192/384 | 128/192/256/512. LR patch size is set to 48 or 64 when compared with RCAN or RRDB.
 
       , "dataloader_shuffle": true
       , "dataloader_num_workers": 16
-      , "dataloader_batch_size": 32      // batch size 1 | 16 | 32 | 48 | 64 | 128. Total batch size =4x8=32 in SwinIR
+      , "dataloader_batch_size": 8      // batch size 1 | 16 | 32 | 48 | 64 | 128. Total batch size =4x8=32 in SwinIR
     }
     , "test": {
       "name": "test_dataset"            // just name
-      , "dataset_type": "sr"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "jpeg"
-      , "dataroot_H": "/lustre06/project/6003167/SharedProject4Kto8K_SDRfixedReinhard/4K_Stelios"// path of H training dataset. DIV2K (800 training images)
-      , "dataroot_L": "/lustre06/project/6003167/Share_4K8K/4K_PQ_EXR"              // path of L training dataset
-	  , "dataroot_H2": "/lustre06/project/6003167/shared_itmo_fixed/Garden/HDR"
-	  , "dataroot_L2": "/lustre06/project/6003167/shared_itmo_fixed/Garden/SDR"
+      , "dataset_type": "itmo"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "jpeg"
+      , "dataroot": "/home/slee67/KAIR/test_itmo_dirs.txt"
+	  , "H_size": 512                   // 96/144|192/384 | 128/192/256/512. LR patch size is set to 48 or 64 when compared with RCAN or RRDB.
 
     }
   }
@@ -78,8 +73,8 @@
     , "G_param_strict": true
     , "E_param_strict": true
 
-    , "checkpoint_test": 5000           // for testing
-    , "checkpoint_save": 5000           // for saving model
-    , "checkpoint_print": 200           // for print
+    , "checkpoint_test": 50           // for testing
+    , "checkpoint_save": 50           // for saving model
+    , "checkpoint_print": 1           // for print
   }
 }

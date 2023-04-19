@@ -208,12 +208,23 @@ def main(json_path='options/train_msrresnet_psnr.json'):
             # 6) testing
             # -------------------------------
             if current_step % opt['train']['checkpoint_test'] == 0 and opt['rank'] == 0:
+                
+                torch.cuda.empty_cache()
+                total = torch.cuda.get_device_properties(0).total_memory
+                reserved = torch.cuda.memory_reserved(0)
+                allocated = torch.cuda.memory_allocated(0)
+                free = reserved-allocated  # free inside reserved
+                print("Total memory: ", total)
+                print("Reserved memory: ",reserved)
+                print("Allocated memory: ",allocated)
+                print("Free memory: ",free)
 
                 avg_psnr = 0.0
                 idx = 0
 
                 for test_data in test_loader:
                     idx += 1
+                    #print("Validation #: ",idx)
                     image_name_ext = os.path.basename(test_data['L_path'][0])
                     img_name, ext = os.path.splitext(image_name_ext)
 
@@ -238,7 +249,7 @@ def main(json_path='options/train_msrresnet_psnr.json'):
                     # -----------------------
                     current_psnr = util.calculate_psnr(E_img, H_img, border=border)
 
-                    logger.info('{:->4d}--> {:>10s} | {:<4.2f}dB'.format(idx, image_name_ext, current_psnr))
+                    #logger.info('{:->4d}--> {:>10s} | {:<4.2f}dB'.format(idx, image_name_ext, current_psnr))
 
                     avg_psnr += current_psnr
 
