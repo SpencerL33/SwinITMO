@@ -9,16 +9,16 @@
 
   , "path": {
     "root": "iTMO"            // "denoising" | "superresolution" | "dejpeg"
-    , "pretrained_netG": null      // path of pretrained model. We fine-tune X3/X4/X8 models from X2 model, so that `G_optimizer_lr` and `G_scheduler_milestones` can be halved to save time.
-    , "pretrained_netE": null      // path of pretrained model
+    , "pretrained_netG": "models/4950_optimizerG.pth"      // path of pretrained model. We fine-tune X3/X4/X8 models from X2 model, so that `G_optimizer_lr` and `G_scheduler_milestones` can be halved to save time.
+    , "pretrained_netE": "models/4950_E.pth"      // path of pretrained model
   }
 
   , "datasets": {
     "train": {
       "name": "train_dataset"           // just name
       , "dataset_type": "sr"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "jpeg"
-      , "dataroot_H": "/lustre06/project/6003167/shared_itmo_demo_dataset/HDR"// path of H training dataset. DIV2K (800 training images)
-      , "dataroot_L": "/lustre06/project/6003167/shared_itmo_demo_dataset/SDR"              // path of L training dataset
+      , "dataroot_H": "/testsets/swinir/HDR"// path of H training dataset. DIV2K (800 training images)
+      , "dataroot_L": "/testsets/swinir/SDR"              // path of L training dataset
 	  , "dataroot_H2": null		///lustre06/project/6003167/shared_itmo_demo_dataset/hdr
 	  , "dataroot_L2": null
 
@@ -31,8 +31,8 @@
     , "test": {
       "name": "test_dataset"            // just name
       , "dataset_type": "sr"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "jpeg"
-      , "dataroot_H": "/lustre06/project/6003167/shared_itmo_demo_dataset/HDR"		// path of H training dataset. DIV2K (800 training images)
-      , "dataroot_L": "/lustre06/project/6003167/shared_itmo_demo_dataset/SDR"              // path of L training dataset
+      , "dataroot_H": "C:/Users/jason/Desktop/SwinITMO/testsets/Cropped_data/HDR"		// path of H training dataset. DIV2K (800 training images)
+      , "dataroot_L": "C:/Users/jason/Desktop/SwinITMO/testsets/Cropped_data/SDR"              // path of L training dataset
 	  , "dataroot_H2": null 	//"/lustre06/project/6003167/shared_itmo_fixed/Garden/HDR"
 	  , "dataroot_L2": null 	//"/lustre06/project/6003167/shared_itmo_fixed/Garden/SDR"
 
