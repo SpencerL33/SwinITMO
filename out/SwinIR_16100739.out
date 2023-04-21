@@ -1,0 +1,60 @@
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) libfabric/1.10.1     2) openmpi/4.0.3     3) ucx/1.8.0
+
+
+Lmod is automatically replacing "intel/2020.1.217" with "gcc/9.3.0".
+
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) blis/0.8.1     2) cuda/11.4     3) flexiblas/3.0.4     4) openmpi/4.0.3
+
+Fri Apr 21 04:04:10 2023       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 525.105.17   Driver Version: 525.105.17   CUDA Version: 12.0     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA A100-SXM...  Off  | 00000000:01:00.0 Off |                    0 |
+| N/A   31C    P0    54W / 400W |      0MiB / 40960MiB |      0%      Default |
+|                               |                      |             Disabled |
++-------------------------------+----------------------+----------------------+
+|   1  NVIDIA A100-SXM...  Off  | 00000000:41:00.0 Off |                    0 |
+| N/A   28C    P0    51W / 400W |      0MiB / 40960MiB |      0%      Default |
+|                               |                      |             Disabled |
++-------------------------------+----------------------+----------------------+
+|   2  NVIDIA A100-SXM...  Off  | 00000000:81:00.0 Off |                    0 |
+| N/A   31C    P0    53W / 400W |      0MiB / 40960MiB |      0%      Default |
+|                               |                      |             Disabled |
++-------------------------------+----------------------+----------------------+
+|   3  NVIDIA A100-SXM...  Off  | 00000000:C1:00.0 Off |                    0 |
+| N/A   30C    P0    54W / 400W |      0MiB / 40960MiB |      0%      Default |
+|                               |                      |             Disabled |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+Testing...
+export CUDA_VISIBLE_DEVICES=0,1,2,3
+number of GPUs is: 4
+Traceback (most recent call last):
+  File "/home/slee67/KAIR/main_train_psnr.py", line 275, in <module>
+    main()
+  File "/home/slee67/KAIR/main_train_psnr.py", line 59, in main
+    util.mkdirs((path for key, path in opt['path'].items() if 'pretrained' not in key))
+  File "/home/slee67/KAIR/utils/utils_image.py", line 182, in mkdirs
+    mkdir(path)
+  File "/home/slee67/KAIR/utils/utils_image.py", line 174, in mkdir
+    os.makedirs(path)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/python/3.10.2/lib/python3.10/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/python/3.10.2/lib/python3.10/os.py", line 225, in makedirs
+    mkdir(name, mode)
+PermissionError: [Errno 13] Permission denied: '/scratch/iTMO'

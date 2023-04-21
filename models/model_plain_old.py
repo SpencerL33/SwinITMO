@@ -8,19 +8,9 @@ from models.select_network import define_G
 from models.model_base import ModelBase
 from models.loss import CharbonnierLoss
 from models.loss_ssim import SSIMLoss
+
 from utils.utils_model import test_mode
 from utils.utils_regularizers import regularizer_orth, regularizer_clip
-
-class ExpandNetLoss(nn.Module):
-    def __init__(self, loss_lambda=5):
-        super(ExpandNetLoss, self).__init__()
-        self.similarity = torch.nn.CosineSimilarity(dim=1, eps=1e-20)
-        self.l1_loss = nn.L1Loss()
-        self.loss_lambda = loss_lambda
-
-    def forward(self, x, y):
-        cosine_term = (1 - self.similarity(x, y)).mean()
-        return self.l1_loss(x, y) + self.loss_lambda * cosine_term
 
 
 class ModelPlain(ModelBase):
@@ -107,8 +97,6 @@ class ModelPlain(ModelBase):
             self.G_lossfn = SSIMLoss().to(self.device)
         elif G_lossfn_type == 'charbonnier':
             self.G_lossfn = CharbonnierLoss(self.opt_train['G_charbonnier_eps']).to(self.device)
-        elif G_lossfn_type =='expandNet':
-            self.G_lossfn = ExpandNetLoss().to(self.device)
         else:
             raise NotImplementedError('Loss type [{:s}] is not found.'.format(G_lossfn_type))
         self.G_lossfn_weight = self.opt_train['G_lossfn_weight']
