@@ -74,7 +74,7 @@ class DatasetSR(data.Dataset):
         # ------------------------------------
         # modcrop
         # ------------------------------------
-        img_H = util.modcrop(img_H, self.sf)
+        #img_H = util.modcrop(img_H, self.sf)
 
         # ------------------------------------
         # get L image
@@ -99,7 +99,7 @@ class DatasetSR(data.Dataset):
             # sythesize L image via matlab's bicubic
             # --------------------------------
             H, W = img_H.shape[:2]
-            img_L = util.imresize_np(img_H, 1 / self.sf, True)
+            #img_L = util.imresize_np(img_H, 1 / self.sf, True)
 
         # ------------------------------------
         # if train, get L/H patch pair
