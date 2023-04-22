@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=SwinIR
+#SBATCH --job-name=l1_eval
 #SBATCH -o ./out/%x_%j.out
 #SBATCH --nodes 1
 #SBATCH --tasks-per-node=1

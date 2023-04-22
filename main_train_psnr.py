@@ -235,21 +235,34 @@ def main(json_path='options/train_msrresnet_psnr.json'):
                     model.test()
 
                     visuals = model.current_visuals()
-                    E_img = util.tensor2uint(visuals['E'])
-                    H_img = util.tensor2uint(visuals['H'])
+                    L_img = util.tensor2float32(visuals['L'])
+                    E_img = util.tensor2float32(visuals['E'])
+                    H_img = util.tensor2float32(visuals['H'])
 
                     # -----------------------
                     # save estimated image E
                     # -----------------------
-                    save_img_path = os.path.join(img_dir, '{:s}_{:d}.png'.format(img_name, current_step))
-                    util.imsave(E_img, save_img_path)
+                    save_img_path = os.path.join(img_dir, '{:s}_{:d}_estimate.png'.format(img_name, current_step))
+                    util.exrsave(E_img, save_img_path)
+                    
+                    # -----------------------
+                    # save input SDR image 
+                    # -----------------------
+                    save_img_path = os.path.join(img_dir, '{:s}_{:d}_input.png'.format(img_name, current_step))
+                    util.exrsave(L_img, save_img_path)
+                    
+                    # -----------------------
+                    # save target HDR image 
+                    # -----------------------
+                    save_img_path = os.path.join(img_dir, '{:s}_{:d}_target.png'.format(img_name, current_step))
+                    util.exrsave(H_img, save_img_path)
 
                     # -----------------------
                     # calculate PSNR
                     # -----------------------
                     current_psnr = util.calculate_psnr(E_img, H_img, border=border)
 
-                    #logger.info('{:->4d}--> {:>10s} | {:<4.2f}dB'.format(idx, image_name_ext, current_psnr))
+                    logger.info('{:->4d}--> {:>10s} | {:<4.2f}dB'.format(idx, image_name_ext, current_psnr))
 
                     avg_psnr += current_psnr
 

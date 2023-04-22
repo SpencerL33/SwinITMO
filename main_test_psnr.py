@@ -155,6 +155,9 @@ def main(json_path='options/swinir/train_swinir_hdr_v2.json'):
         L_img = util.tensor2float32(visuals['L'])
         E_img = util.tensor2float32(visuals['E'])
         H_img = util.tensor2float32(visuals['H'])
+        #L_img = visuals['L']
+        #E_img = visuals['E']
+        #H_img = visuals['H']
         
         # -----------------------
         # save estimated image E

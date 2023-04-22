@@ -131,7 +131,7 @@ def exrsave(imgs, img_path):
     """
     imgs: image of size WxHxC
     """
-    cv2.imwrite(imgs, img_path, [cv2.IMWRITE_EXR_TYPE, cv2.IMWRITE_EXR_TYPE_HALF])
+    cv2.imwrite(img_path, imgs, [cv2.IMWRITE_EXR_TYPE, cv2.IMWRITE_EXR_TYPE_HALF])
 
 
 def split_imageset(original_dataroot, taget_dataroot, n_channels=3, p_size=512, p_overlap=96, p_max=800):
@@ -310,7 +310,7 @@ def tensor2float32(img):
     img = img.data.squeeze().float().clamp(0, 1).cpu().numpy()
     if img.ndim == 3:
         img = np.transpose(img, (1, 2, 0))
-    return np.float32((img*255.0).round())
+    return np.float32(img)
 
 
 # --------------------------------------------

@@ -8,16 +8,16 @@
   , "n_channels": 3  // broadcast to "datasets", 1 for grayscale, 3 for color
 
   , "path": {
-    "root": "SwinITMO_v2"            // "denoising" | "superresolution" | "dejpeg"
-    , "pretrained_netG": null      // path of pretrained model. We fine-tune X3/X4/X8 models from X2 model, so that `G_optimizer_lr` and `G_scheduler_milestones` can be halved to save time.
-    , "pretrained_netE": null      // path of pretrained model
+    "root": "SwinITMO_v3"            // "denoising" | "superresolution" | "dejpeg"
+    , "pretrained_netG": "/home/slee67/iTMO_v3/iTMO/models/7400_optimizerG.pth"      // path of pretrained model. We fine-tune X3/X4/X8 models from X2 model, so that `G_optimizer_lr` and `G_scheduler_milestones` can be halved to save time.
+    , "pretrained_netE": "/home/slee67/iTMO_v3/iTMO/models/7400_E.pth"      // path of pretrained model
   }
 
   , "datasets": {
     "train": {
       "name": "train_dataset"           // just name
 	  , "dataset_type": "itmo"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "jpeg"
-	  , "dataroot": "/home/slee67/KAIR/train_itmo_dirs.txt"
+	  , "dataroot": "/home/slee67/KAIR/iTMO_dirs.txt"
 
       , "H_size": 64                   // 96/144|192/384 | 128/192/256/512. LR patch size is set to 48 or 64 when compared with RCAN or RRDB.
 
@@ -28,8 +28,8 @@
     , "test": {
       "name": "test_dataset"            // just name
       , "dataset_type": "itmo"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "jpeg"
-      , "dataroot": "/home/slee67/KAIR/test_itmo_dirs.txt"
-	  , "H_size": 512                   // 96/144|192/384 | 128/192/256/512. LR patch size is set to 48 or 64 when compared with RCAN or RRDB.
+      , "dataroot": "/home/slee67/KAIR/test_dirs.txt"
+	  , "H_size": 1024                   // 96/144|192/384 | 128/192/256/512. LR patch size is set to 48 or 64 when compared with RCAN or RRDB.
 
     }
   }

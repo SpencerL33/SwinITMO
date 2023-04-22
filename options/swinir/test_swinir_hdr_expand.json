@@ -8,9 +8,9 @@
   , "n_channels": 3  // broadcast to "datasets", 1 for grayscale, 3 for color
 
   , "path": {
-    "root": "SwiniTMO"            // "denoising" | "superresolution" | "dejpeg"
-    , "pretrained_netG": "/home/slee67/iteration(16200)_expandNet/16200_optimizerG.pth"      // path of pretrained model. We fine-tune X3/X4/X8 models from X2 model, so that `G_optimizer_lr` and `G_scheduler_milestones` can be halved to save time.
-    , "pretrained_netE": "/home/slee67/iteration(16200)_expandNet/16200_E.pth"      // path of pretrained model
+    "root": "models"            // "denoising" | "superresolution" | "dejpeg"
+    , "pretrained_netG": null      // path of pretrained model. We fine-tune X3/X4/X8 models from X2 model, so that `G_optimizer_lr` and `G_scheduler_milestones` can be halved to save time.
+    , "pretrained_netE": null      // path of pretrained model
   }
 
   , "datasets": {
@@ -31,8 +31,8 @@
     , "test": {
       "name": "test_dataset"            // just name
       , "dataset_type": "sr"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "jpeg"
-      , "dataroot_H": "/lustre06/project/6003167/ECE_571_2023/iTMO/Data/Test_dataset/Cropped_data/HDR/"		// path of H training dataset. DIV2K (800 training images)
-      , "dataroot_L": "/lustre06/project/6003167/ECE_571_2023/iTMO/Data/Test_dataset/Cropped_data/SDR/"              // path of L training dataset
+      , "dataroot_H": "/lustre06/project/6003167/ECE_571_2023/iTMO/Data/Test_dataset_hamid_cropped/HDR/"		// path of H training dataset. DIV2K (800 training images)
+      , "dataroot_L": "/lustre06/project/6003167/ECE_571_2023/iTMO/Data/Test_dataset_hamid_cropped/SDR/"              // path of L training dataset
 	  , "dataroot_H2": null 	//"/lustre06/project/6003167/shared_itmo_fixed/Garden/HDR"
 	  , "dataroot_L2": null 	//"/lustre06/project/6003167/shared_itmo_fixed/Garden/SDR"
 

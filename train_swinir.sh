@@ -1,12 +1,13 @@
 #!/bin/bash
 #SBATCH --job-name=SwinIR
+#SBATCH -o ./out/%x_%j.out
 #SBATCH --nodes 1
 #SBATCH --tasks-per-node=1
 #SBATCH --account=def-panos
 #SBATCH --gres=gpu:4
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=16G
-#SBATCH --time=0:45:00
+#SBATCH --time=1:00:00
 
 
 module load python/3.10
