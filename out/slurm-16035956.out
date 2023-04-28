@@ -1,0 +1,151 @@
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) libfabric/1.10.1     2) openmpi/4.0.3     3) ucx/1.8.0
+
+
+Lmod is automatically replacing "intel/2020.1.217" with "gcc/9.3.0".
+
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) blis/0.8.1     2) cuda/11.4     3) flexiblas/3.0.4     4) openmpi/4.0.3
+
+Wed Apr 19 01:52:01 2023       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 525.105.17   Driver Version: 525.105.17   CUDA Version: 12.0     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA A100-SXM...  Off  | 00000000:01:00.0 Off |                    0 |
+| N/A   31C    P0    52W / 400W |      0MiB / 40960MiB |      0%      Default |
+|                               |                      |             Disabled |
++-------------------------------+----------------------+----------------------+
+|   1  NVIDIA A100-SXM...  Off  | 00000000:41:00.0 Off |                    0 |
+| N/A   30C    P0    48W / 400W |      0MiB / 40960MiB |      0%      Default |
+|                               |                      |             Disabled |
++-------------------------------+----------------------+----------------------+
+|   2  NVIDIA A100-SXM...  Off  | 00000000:81:00.0 Off |                    0 |
+| N/A   31C    P0    51W / 400W |      0MiB / 40960MiB |      0%      Default |
+|                               |                      |             Disabled |
++-------------------------------+----------------------+----------------------+
+|   3  NVIDIA A100-SXM...  Off  | 00000000:C1:00.0 Off |                    0 |
+| N/A   30C    P0    50W / 400W |      0MiB / 40960MiB |      0%      Default |
+|                               |                      |             Disabled |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+Testing...
+23-04-19 01:52:06.384 :   task: ITMO TRAINING
+  model: plain
+  gpu_ids: [0, 1, 2, 3]
+  dist: False
+  scale: 1
+  n_channels: 3
+  path:[
+    root: SwinITMO
+    pretrained_netG: SwinITMO/ITMO TRAINING/models/1100_G.pth
+    pretrained_netE: SwinITMO/ITMO TRAINING/models/1100_E.pth
+    task: SwinITMO/ITMO TRAINING
+    log: SwinITMO/ITMO TRAINING
+    options: SwinITMO/ITMO TRAINING/options
+    models: SwinITMO/ITMO TRAINING/models
+    images: SwinITMO/ITMO TRAINING/images
+    pretrained_optimizerG: SwinITMO/ITMO TRAINING/models/1100_optimizerG.pth
+  ]
+  datasets:[
+    train:[
+      name: train_dataset
+      dataset_type: itmo
+      dataroot: /home/slee67/KAIR/train_itmo_dirs.txt
+      H_size: 64
+      dataloader_shuffle: True
+      dataloader_num_workers: 16
+      dataloader_batch_size: 8
+      phase: train
+      scale: 1
+      n_channels: 3
+    ]
+    test:[
+      name: test_dataset
+      dataset_type: itmo
+      dataroot: /home/slee67/KAIR/test_itmo_dirs.txt
+      phase: test
+      scale: 1
+      n_channels: 3
+    ]
+  ]
+  netG:[
+    net_type: swinir
+    upscale: 1
+    in_chans: 3
+    img_size: 48
+    window_size: 8
+    img_range: 1.0
+    depths: [6, 6, 6, 6, 6, 6]
+    embed_dim: 180
+    num_heads: [6, 6, 6, 6, 6, 6]
+    mlp_ratio: 2
+    upsampler: null
+    resi_connection: 1conv
+    init_type: default
+    scale: 1
+  ]
+  train:[
+    G_lossfn_type: l1
+    G_lossfn_weight: 1.0
+    E_decay: 0.999
+    G_optimizer_type: adam
+    G_optimizer_lr: 0.0002
+    G_optimizer_wd: 0
+    G_optimizer_clipgrad: None
+    G_optimizer_reuse: True
+    G_scheduler_type: MultiStepLR
+    G_scheduler_milestones: [250000, 400000, 450000, 475000, 500000]
+    G_scheduler_gamma: 0.5
+    G_regularizer_orthstep: None
+    G_regularizer_clipstep: None
+    G_param_strict: True
+    E_param_strict: True
+    checkpoint_test: 1000000
+    checkpoint_save: 100
+    checkpoint_print: 1
+    F_feature_layer: 34
+    F_weights: 1.0
+    F_lossfn_type: l1
+    F_use_input_norm: True
+    F_use_range_norm: False
+    G_optimizer_betas: [0.9, 0.999]
+    G_scheduler_restart_weights: 1
+  ]
+  opt_path: /home/slee67/KAIR/options/swinir/train_swinir_hdr.json
+  is_train: True
+  merge_bn: False
+  merge_bn_startpoint: -1
+  find_unused_parameters: True
+  use_static_graph: False
+  num_gpu: 4
+  rank: 0
+  world_size: 1
+
+export CUDA_VISIBLE_DEVICES=0,1,2,3
+number of GPUs is: 4
+LogHandlers setup!
+Random seed: 1760
+Number of HDR photos:  14582
+Traceback (most recent call last):
+  File "/home/slee67/KAIR/main_train_psnr.py", line 253, in <module>
+    main()
+  File "/home/slee67/KAIR/main_train_psnr.py", line 120, in main
+    train_set = define_Dataset(dataset_opt)
+  File "/home/slee67/KAIR/data/select_dataset.py", line 100, in define_Dataset
+    dataset = D(dataset_opt)
+  File "/home/slee67/KAIR/data/dataset_itmo.py", line 41, in __init__
+    pritn("Number of SDR photos: ",len(self.paths_L))
+NameError: name 'pritn' is not defined. Did you mean: 'print'?

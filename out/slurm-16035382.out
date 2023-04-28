@@ -1,0 +1,22 @@
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) libfabric/1.10.1     2) openmpi/4.0.3     3) ucx/1.8.0
+
+
+Lmod is automatically replacing "intel/2020.1.217" with "gcc/9.3.0".
+
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) blis/0.8.1     2) cuda/11.4     3) flexiblas/3.0.4     4) openmpi/4.0.3
+
+Creating directories...
+Number of images in H1 before trim = 13440
+Number of images in H2 before trim = 4427
+Number of images in L1 before trim = 12738
+Number of images in L2 before trim = 4427
+Number of images in H1 = 11898
+Number of images in H2 = 4427
+Number of images in L1 = 11898
+Number of images in L2 = 4303
+('/lustre06/project/6003167/shared_itmo_fixed/Garden/HDR/176_HDR.exr', '/lustre06/project/6003167/shared_itmo_fixed/Garden/SDR/176_SDR.exr')
+('/lustre06/project/6003167/Share_4K8K/4K_PQ_EXR/c13_Volleyball_crawlingtext_4K/087_c13_Volleyball_crawlingtext_4K_PQ.exr', '/lustre06/project/6003167/SharedProject4Kto8K_SDRfixedReinhard/4K_Stelios/c13_Volleyball_crawlingtext_4K/087_c13_Volleyball_crawlingtext_4K_PQ.exr')

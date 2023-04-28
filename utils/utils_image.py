@@ -24,7 +24,7 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 
 IMG_EXTENSIONS = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG', '.ppm', '.PPM', '.bmp', '.BMP', '.tif', '.exr']
-
+EXCLUDE = ['c17_HorseRace_homestretch_4K', 'c01_Fireworks_willow_4K', 'c02_Fireworks_longshot_4K']
 
 def is_image_file(filename):
     return any(filename.endswith(extension) for extension in IMG_EXTENSIONS)
@@ -78,7 +78,9 @@ def get_image_paths(dataroot):
 def _get_paths_from_images(path):
     assert os.path.isdir(path), '{:s} is not a valid directory'.format(path)
     images = []
-    for dirpath, _, fnames in sorted(os.walk(path)):
+    for dirpath, dirs, fnames in (os.walk(path)): #sorted
+        dirs[:] = [d for d in dirs if d not in EXCLUDE]
+        #print(sorted(dirs))
         for fname in sorted(fnames):
             if is_image_file(fname):
                 img_path = os.path.join(dirpath, fname)
@@ -123,6 +125,13 @@ def imssave(imgs, img_path):
             img = img[:, :, [2, 1, 0]]
         new_path = os.path.join(os.path.dirname(img_path), img_name+str('_{:04d}'.format(i))+'.png')
         cv2.imwrite(new_path, img)
+
+
+def exrsave(imgs, img_path):
+    """
+    imgs: image of size WxHxC
+    """
+    cv2.imwrite(img_path, imgs, [cv2.IMWRITE_EXR_TYPE, cv2.IMWRITE_EXR_TYPE_HALF])
 
 
 def split_imageset(original_dataroot, taget_dataroot, n_channels=3, p_size=512, p_overlap=96, p_max=800):
@@ -295,6 +304,13 @@ def tensor2uint(img):
     if img.ndim == 3:
         img = np.transpose(img, (1, 2, 0))
     return np.uint8((img*255.0).round())
+
+
+def tensor2float32(img):
+    img = img.data.squeeze().float().clamp(0, 1).cpu().numpy()
+    if img.ndim == 3:
+        img = np.transpose(img, (1, 2, 0))
+    return np.float32(img)
 
 
 # --------------------------------------------

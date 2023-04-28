@@ -1,0 +1,1687 @@
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) libfabric/1.10.1     2) openmpi/4.0.3     3) ucx/1.8.0
+
+
+Lmod is automatically replacing "intel/2020.1.217" with "gcc/9.3.0".
+
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) blis/0.8.1     2) cuda/11.4     3) flexiblas/3.0.4     4) openmpi/4.0.3
+
+Wed Apr 19 05:09:58 2023       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 525.105.17   Driver Version: 525.105.17   CUDA Version: 12.0     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA A100-SXM...  Off  | 00000000:01:00.0 Off |                    0 |
+| N/A   30C    P0    53W / 400W |      0MiB / 40960MiB |      0%      Default |
+|                               |                      |             Disabled |
++-------------------------------+----------------------+----------------------+
+|   1  NVIDIA A100-SXM...  Off  | 00000000:41:00.0 Off |                    0 |
+| N/A   29C    P0    53W / 400W |      0MiB / 40960MiB |      0%      Default |
+|                               |                      |             Disabled |
++-------------------------------+----------------------+----------------------+
+|   2  NVIDIA A100-SXM...  Off  | 00000000:81:00.0 Off |                    0 |
+| N/A   30C    P0    51W / 400W |      0MiB / 40960MiB |      0%      Default |
+|                               |                      |             Disabled |
++-------------------------------+----------------------+----------------------+
+|   3  NVIDIA A100-SXM...  Off  | 00000000:C1:00.0 Off |                    0 |
+| N/A   31C    P0    55W / 400W |      0MiB / 40960MiB |      0%      Default |
+|                               |                      |             Disabled |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+Testing...
+23-04-19 05:10:03.915 :   task: ITMO TRAINING
+  model: plain
+  gpu_ids: [0, 1, 2, 3]
+  dist: False
+  scale: 1
+  n_channels: 3
+  path:[
+    root: SwinITMO
+    pretrained_netG: SwinITMO/ITMO TRAINING/models/1100_G.pth
+    pretrained_netE: SwinITMO/ITMO TRAINING/models/1100_E.pth
+    task: SwinITMO/ITMO TRAINING
+    log: SwinITMO/ITMO TRAINING
+    options: SwinITMO/ITMO TRAINING/options
+    models: SwinITMO/ITMO TRAINING/models
+    images: SwinITMO/ITMO TRAINING/images
+    pretrained_optimizerG: SwinITMO/ITMO TRAINING/models/1100_optimizerG.pth
+  ]
+  datasets:[
+    train:[
+      name: train_dataset
+      dataset_type: itmo
+      dataroot: /home/slee67/KAIR/train_itmo_dirs.txt
+      H_size: 64
+      dataloader_shuffle: True
+      dataloader_num_workers: 16
+      dataloader_batch_size: 8
+      phase: train
+      scale: 1
+      n_channels: 3
+    ]
+    test:[
+      name: test_dataset
+      dataset_type: itmo
+      dataroot: /home/slee67/KAIR/test_itmo_dirs.txt
+      phase: test
+      scale: 1
+      n_channels: 3
+    ]
+  ]
+  netG:[
+    net_type: swinir
+    upscale: 1
+    in_chans: 3
+    img_size: 48
+    window_size: 8
+    img_range: 1.0
+    depths: [6, 6, 6, 6, 6, 6]
+    embed_dim: 180
+    num_heads: [6, 6, 6, 6, 6, 6]
+    mlp_ratio: 2
+    upsampler: null
+    resi_connection: 1conv
+    init_type: default
+    scale: 1
+  ]
+  train:[
+    G_lossfn_type: l1
+    G_lossfn_weight: 1.0
+    E_decay: 0.999
+    G_optimizer_type: adam
+    G_optimizer_lr: 0.0002
+    G_optimizer_wd: 0
+    G_optimizer_clipgrad: None
+    G_optimizer_reuse: True
+    G_scheduler_type: MultiStepLR
+    G_scheduler_milestones: [250000, 400000, 450000, 475000, 500000]
+    G_scheduler_gamma: 0.5
+    G_regularizer_orthstep: None
+    G_regularizer_clipstep: None
+    G_param_strict: True
+    E_param_strict: True
+    checkpoint_test: 1000000
+    checkpoint_save: 100
+    checkpoint_print: 1
+    F_feature_layer: 34
+    F_weights: 1.0
+    F_lossfn_type: l1
+    F_use_input_norm: True
+    F_use_range_norm: False
+    G_optimizer_betas: [0.9, 0.999]
+    G_scheduler_restart_weights: 1
+  ]
+  opt_path: /home/slee67/KAIR/options/swinir/train_swinir_hdr.json
+  is_train: True
+  merge_bn: False
+  merge_bn_startpoint: -1
+  find_unused_parameters: True
+  use_static_graph: False
+  num_gpu: 4
+  rank: 0
+  world_size: 1
+
+23-04-19 05:10:04.053 : Number of train images: 14,582, iters: 1,823
+/home/slee67/ENV/lib/python3.10/site-packages/torch/utils/data/dataloader.py:554: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 1, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+/home/slee67/ENV/lib/python3.10/site-packages/torch/functional.py:504: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at /home/coulombc/wheels_builder/tmp.17380/python-3.10/torch/aten/src/ATen/native/TensorShape.cpp:3190.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+23-04-19 05:10:08.963 : 
+Networks name: SwinIR
+Params number: 11504163
+Net structure:
+SwinIR(
+  (conv_first): Conv2d(3, 180, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (patch_embed): PatchEmbed(
+    (norm): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+  )
+  (patch_unembed): PatchUnEmbed()
+  (pos_drop): Dropout(p=0.0, inplace=False)
+  (layers): ModuleList(
+    (0): RSTB(
+      (residual_group): BasicLayer(
+        dim=180, input_resolution=(48, 48), depth=6
+        (blocks): ModuleList(
+          (0): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=0, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): Identity()
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (1): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=4, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.003)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (2): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=0, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.006)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (3): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=4, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.009)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (4): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=0, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.011)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (5): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=4, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.014)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+        )
+      )
+      (conv): Conv2d(180, 180, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (patch_embed): PatchEmbed()
+      (patch_unembed): PatchUnEmbed()
+    )
+    (1): RSTB(
+      (residual_group): BasicLayer(
+        dim=180, input_resolution=(48, 48), depth=6
+        (blocks): ModuleList(
+          (0): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=0, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.017)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (1): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=4, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.020)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (2): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=0, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.023)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (3): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=4, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.026)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (4): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=0, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.029)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (5): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=4, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.031)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+        )
+      )
+      (conv): Conv2d(180, 180, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (patch_embed): PatchEmbed()
+      (patch_unembed): PatchUnEmbed()
+    )
+    (2): RSTB(
+      (residual_group): BasicLayer(
+        dim=180, input_resolution=(48, 48), depth=6
+        (blocks): ModuleList(
+          (0): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=0, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.034)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (1): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=4, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.037)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (2): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=0, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.040)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (3): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=4, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.043)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (4): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=0, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.046)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (5): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=4, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.049)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+        )
+      )
+      (conv): Conv2d(180, 180, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (patch_embed): PatchEmbed()
+      (patch_unembed): PatchUnEmbed()
+    )
+    (3): RSTB(
+      (residual_group): BasicLayer(
+        dim=180, input_resolution=(48, 48), depth=6
+        (blocks): ModuleList(
+          (0): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=0, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.051)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (1): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=4, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.054)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (2): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=0, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.057)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (3): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=4, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.060)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (4): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=0, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.063)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (5): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=4, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.066)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+        )
+      )
+      (conv): Conv2d(180, 180, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (patch_embed): PatchEmbed()
+      (patch_unembed): PatchUnEmbed()
+    )
+    (4): RSTB(
+      (residual_group): BasicLayer(
+        dim=180, input_resolution=(48, 48), depth=6
+        (blocks): ModuleList(
+          (0): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=0, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.069)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (1): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=4, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.071)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (2): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=0, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.074)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (3): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=4, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.077)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (4): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=0, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.080)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (5): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=4, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.083)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+        )
+      )
+      (conv): Conv2d(180, 180, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (patch_embed): PatchEmbed()
+      (patch_unembed): PatchUnEmbed()
+    )
+    (5): RSTB(
+      (residual_group): BasicLayer(
+        dim=180, input_resolution=(48, 48), depth=6
+        (blocks): ModuleList(
+          (0): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=0, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.086)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (1): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=4, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.089)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (2): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=0, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.091)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (3): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=4, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.094)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (4): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=0, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.097)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (5): SwinTransformerBlock(
+            dim=180, input_resolution=(48, 48), num_heads=6, window_size=8, shift_size=4, mlp_ratio=2
+            (norm1): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (attn): WindowAttention(
+              dim=180, window_size=(8, 8), num_heads=6
+              (qkv): Linear(in_features=180, out_features=540, bias=True)
+              (attn_drop): Dropout(p=0.0, inplace=False)
+              (proj): Linear(in_features=180, out_features=180, bias=True)
+              (proj_drop): Dropout(p=0.0, inplace=False)
+              (softmax): Softmax(dim=-1)
+            )
+            (drop_path): DropPath(drop_prob=0.100)
+            (norm2): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+            (mlp): Mlp(
+              (fc1): Linear(in_features=180, out_features=360, bias=True)
+              (act): GELU(approximate='none')
+              (fc2): Linear(in_features=360, out_features=180, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+        )
+      )
+      (conv): Conv2d(180, 180, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (patch_embed): PatchEmbed()
+      (patch_unembed): PatchUnEmbed()
+    )
+  )
+  (norm): LayerNorm((180,), eps=1e-05, elementwise_affine=True)
+  (conv_after_body): Conv2d(180, 180, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (conv_last): Conv2d(180, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+)
+
+23-04-19 05:10:09.044 : 
+ |  mean  |  min   |  max   |  std   || shape               
+ | -0.001 | -0.204 |  0.201 |  0.110 | torch.Size([180, 3, 3, 3]) || conv_first.weight
+ |  0.010 | -0.193 |  0.191 |  0.113 | torch.Size([180]) || conv_first.bias
+ |  1.002 |  0.996 |  1.018 |  0.003 | torch.Size([180]) || patch_embed.norm.weight
+ | -0.000 | -0.008 |  0.008 |  0.003 | torch.Size([180]) || patch_embed.norm.bias
+ |  0.996 |  0.987 |  1.011 |  0.004 | torch.Size([180]) || layers.0.residual_group.blocks.0.norm1.weight
+ |  0.000 | -0.012 |  0.014 |  0.006 | torch.Size([180]) || layers.0.residual_group.blocks.0.norm1.bias
+ |  0.003 | -0.064 |  0.077 |  0.022 | torch.Size([225, 6]) || layers.0.residual_group.blocks.0.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.0.residual_group.blocks.0.attn.relative_position_index
+ | -0.000 | -0.125 |  0.115 |  0.026 | torch.Size([540, 180]) || layers.0.residual_group.blocks.0.attn.qkv.weight
+ | -0.000 | -0.064 |  0.054 |  0.015 | torch.Size([540]) || layers.0.residual_group.blocks.0.attn.qkv.bias
+ |  0.000 | -0.085 |  0.077 |  0.020 | torch.Size([180, 180]) || layers.0.residual_group.blocks.0.attn.proj.weight
+ | -0.000 | -0.010 |  0.010 |  0.004 | torch.Size([180]) || layers.0.residual_group.blocks.0.attn.proj.bias
+ |  1.003 |  0.979 |  1.041 |  0.011 | torch.Size([180]) || layers.0.residual_group.blocks.0.norm2.weight
+ | -0.000 | -0.017 |  0.017 |  0.007 | torch.Size([180]) || layers.0.residual_group.blocks.0.norm2.bias
+ | -0.000 | -0.123 |  0.105 |  0.021 | torch.Size([360, 180]) || layers.0.residual_group.blocks.0.mlp.fc1.weight
+ | -0.001 | -0.011 |  0.010 |  0.003 | torch.Size([360]) || layers.0.residual_group.blocks.0.mlp.fc1.bias
+ | -0.000 | -0.088 |  0.083 |  0.020 | torch.Size([180, 360]) || layers.0.residual_group.blocks.0.mlp.fc2.weight
+ | -0.000 | -0.008 |  0.008 |  0.003 | torch.Size([180]) || layers.0.residual_group.blocks.0.mlp.fc2.bias
+ | -15.972 | -100.000 |  0.000 | 36.635 | torch.Size([36, 64, 64]) || layers.0.residual_group.blocks.1.attn_mask
+ |  0.998 |  0.987 |  1.012 |  0.004 | torch.Size([180]) || layers.0.residual_group.blocks.1.norm1.weight
+ |  0.000 | -0.010 |  0.010 |  0.005 | torch.Size([180]) || layers.0.residual_group.blocks.1.norm1.bias
+ |  0.003 | -0.064 |  0.076 |  0.022 | torch.Size([225, 6]) || layers.0.residual_group.blocks.1.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.0.residual_group.blocks.1.attn.relative_position_index
+ | -0.000 | -0.161 |  0.149 |  0.026 | torch.Size([540, 180]) || layers.0.residual_group.blocks.1.attn.qkv.weight
+ |  0.001 | -0.070 |  0.066 |  0.016 | torch.Size([540]) || layers.0.residual_group.blocks.1.attn.qkv.bias
+ |  0.000 | -0.086 |  0.083 |  0.020 | torch.Size([180, 180]) || layers.0.residual_group.blocks.1.attn.proj.weight
+ | -0.000 | -0.008 |  0.008 |  0.003 | torch.Size([180]) || layers.0.residual_group.blocks.1.attn.proj.bias
+ |  1.002 |  0.983 |  1.041 |  0.008 | torch.Size([180]) || layers.0.residual_group.blocks.1.norm2.weight
+ |  0.000 | -0.010 |  0.015 |  0.004 | torch.Size([180]) || layers.0.residual_group.blocks.1.norm2.bias
+ | -0.000 | -0.112 |  0.106 |  0.021 | torch.Size([360, 180]) || layers.0.residual_group.blocks.1.mlp.fc1.weight
+ | -0.001 | -0.012 |  0.007 |  0.003 | torch.Size([360]) || layers.0.residual_group.blocks.1.mlp.fc1.bias
+ | -0.000 | -0.099 |  0.080 |  0.020 | torch.Size([180, 360]) || layers.0.residual_group.blocks.1.mlp.fc2.weight
+ | -0.000 | -0.008 |  0.008 |  0.003 | torch.Size([180]) || layers.0.residual_group.blocks.1.mlp.fc2.bias
+ |  0.998 |  0.988 |  1.011 |  0.004 | torch.Size([180]) || layers.0.residual_group.blocks.2.norm1.weight
+ | -0.000 | -0.009 |  0.010 |  0.004 | torch.Size([180]) || layers.0.residual_group.blocks.2.norm1.bias
+ |  0.002 | -0.080 |  0.073 |  0.022 | torch.Size([225, 6]) || layers.0.residual_group.blocks.2.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.0.residual_group.blocks.2.attn.relative_position_index
+ |  0.000 | -0.117 |  0.127 |  0.026 | torch.Size([540, 180]) || layers.0.residual_group.blocks.2.attn.qkv.weight
+ | -0.000 | -0.061 |  0.077 |  0.019 | torch.Size([540]) || layers.0.residual_group.blocks.2.attn.qkv.bias
+ | -0.000 | -0.083 |  0.084 |  0.020 | torch.Size([180, 180]) || layers.0.residual_group.blocks.2.attn.proj.weight
+ | -0.000 | -0.007 |  0.007 |  0.003 | torch.Size([180]) || layers.0.residual_group.blocks.2.attn.proj.bias
+ |  1.001 |  0.989 |  1.021 |  0.006 | torch.Size([180]) || layers.0.residual_group.blocks.2.norm2.weight
+ | -0.000 | -0.009 |  0.008 |  0.004 | torch.Size([180]) || layers.0.residual_group.blocks.2.norm2.bias
+ |  0.000 | -0.101 |  0.104 |  0.020 | torch.Size([360, 180]) || layers.0.residual_group.blocks.2.mlp.fc1.weight
+ | -0.001 | -0.009 |  0.007 |  0.002 | torch.Size([360]) || layers.0.residual_group.blocks.2.mlp.fc1.bias
+ |  0.000 | -0.093 |  0.098 |  0.020 | torch.Size([180, 360]) || layers.0.residual_group.blocks.2.mlp.fc2.weight
+ | -0.000 | -0.005 |  0.005 |  0.002 | torch.Size([180]) || layers.0.residual_group.blocks.2.mlp.fc2.bias
+ | -15.972 | -100.000 |  0.000 | 36.635 | torch.Size([36, 64, 64]) || layers.0.residual_group.blocks.3.attn_mask
+ |  0.998 |  0.988 |  1.015 |  0.004 | torch.Size([180]) || layers.0.residual_group.blocks.3.norm1.weight
+ | -0.000 | -0.008 |  0.008 |  0.003 | torch.Size([180]) || layers.0.residual_group.blocks.3.norm1.bias
+ |  0.003 | -0.073 |  0.088 |  0.023 | torch.Size([225, 6]) || layers.0.residual_group.blocks.3.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.0.residual_group.blocks.3.attn.relative_position_index
+ |  0.000 | -0.152 |  0.131 |  0.027 | torch.Size([540, 180]) || layers.0.residual_group.blocks.3.attn.qkv.weight
+ |  0.000 | -0.060 |  0.062 |  0.020 | torch.Size([540]) || layers.0.residual_group.blocks.3.attn.qkv.bias
+ | -0.000 | -0.087 |  0.082 |  0.020 | torch.Size([180, 180]) || layers.0.residual_group.blocks.3.attn.proj.weight
+ | -0.000 | -0.006 |  0.005 |  0.002 | torch.Size([180]) || layers.0.residual_group.blocks.3.attn.proj.bias
+ |  1.000 |  0.988 |  1.014 |  0.004 | torch.Size([180]) || layers.0.residual_group.blocks.3.norm2.weight
+ | -0.000 | -0.007 |  0.008 |  0.003 | torch.Size([180]) || layers.0.residual_group.blocks.3.norm2.bias
+ | -0.000 | -0.086 |  0.087 |  0.020 | torch.Size([360, 180]) || layers.0.residual_group.blocks.3.mlp.fc1.weight
+ | -0.001 | -0.013 |  0.005 |  0.003 | torch.Size([360]) || layers.0.residual_group.blocks.3.mlp.fc1.bias
+ |  0.000 | -0.081 |  0.084 |  0.020 | torch.Size([180, 360]) || layers.0.residual_group.blocks.3.mlp.fc2.weight
+ | -0.000 | -0.006 |  0.005 |  0.002 | torch.Size([180]) || layers.0.residual_group.blocks.3.mlp.fc2.bias
+ |  0.998 |  0.989 |  1.005 |  0.003 | torch.Size([180]) || layers.0.residual_group.blocks.4.norm1.weight
+ |  0.000 | -0.005 |  0.007 |  0.003 | torch.Size([180]) || layers.0.residual_group.blocks.4.norm1.bias
+ |  0.003 | -0.074 |  0.077 |  0.024 | torch.Size([225, 6]) || layers.0.residual_group.blocks.4.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.0.residual_group.blocks.4.attn.relative_position_index
+ |  0.000 | -0.138 |  0.113 |  0.025 | torch.Size([540, 180]) || layers.0.residual_group.blocks.4.attn.qkv.weight
+ |  0.001 | -0.051 |  0.054 |  0.016 | torch.Size([540]) || layers.0.residual_group.blocks.4.attn.qkv.bias
+ |  0.000 | -0.081 |  0.077 |  0.020 | torch.Size([180, 180]) || layers.0.residual_group.blocks.4.attn.proj.weight
+ | -0.000 | -0.006 |  0.005 |  0.002 | torch.Size([180]) || layers.0.residual_group.blocks.4.attn.proj.bias
+ |  0.998 |  0.990 |  1.006 |  0.003 | torch.Size([180]) || layers.0.residual_group.blocks.4.norm2.weight
+ | -0.000 | -0.007 |  0.007 |  0.003 | torch.Size([180]) || layers.0.residual_group.blocks.4.norm2.bias
+ |  0.000 | -0.091 |  0.080 |  0.020 | torch.Size([360, 180]) || layers.0.residual_group.blocks.4.mlp.fc1.weight
+ | -0.001 | -0.012 |  0.009 |  0.002 | torch.Size([360]) || layers.0.residual_group.blocks.4.mlp.fc1.bias
+ | -0.000 | -0.083 |  0.085 |  0.020 | torch.Size([180, 360]) || layers.0.residual_group.blocks.4.mlp.fc2.weight
+ | -0.000 | -0.005 |  0.005 |  0.002 | torch.Size([180]) || layers.0.residual_group.blocks.4.mlp.fc2.bias
+ | -15.972 | -100.000 |  0.000 | 36.635 | torch.Size([36, 64, 64]) || layers.0.residual_group.blocks.5.attn_mask
+ |  0.998 |  0.982 |  1.020 |  0.003 | torch.Size([180]) || layers.0.residual_group.blocks.5.norm1.weight
+ | -0.000 | -0.006 |  0.007 |  0.002 | torch.Size([180]) || layers.0.residual_group.blocks.5.norm1.bias
+ |  0.003 | -0.073 |  0.065 |  0.022 | torch.Size([225, 6]) || layers.0.residual_group.blocks.5.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.0.residual_group.blocks.5.attn.relative_position_index
+ |  0.000 | -0.128 |  0.125 |  0.025 | torch.Size([540, 180]) || layers.0.residual_group.blocks.5.attn.qkv.weight
+ |  0.000 | -0.054 |  0.049 |  0.016 | torch.Size([540]) || layers.0.residual_group.blocks.5.attn.qkv.bias
+ |  0.000 | -0.077 |  0.084 |  0.020 | torch.Size([180, 180]) || layers.0.residual_group.blocks.5.attn.proj.weight
+ | -0.000 | -0.006 |  0.005 |  0.002 | torch.Size([180]) || layers.0.residual_group.blocks.5.attn.proj.bias
+ |  0.999 |  0.990 |  1.014 |  0.004 | torch.Size([180]) || layers.0.residual_group.blocks.5.norm2.weight
+ | -0.000 | -0.009 |  0.009 |  0.003 | torch.Size([180]) || layers.0.residual_group.blocks.5.norm2.bias
+ |  0.000 | -0.093 |  0.107 |  0.020 | torch.Size([360, 180]) || layers.0.residual_group.blocks.5.mlp.fc1.weight
+ | -0.001 | -0.010 |  0.008 |  0.003 | torch.Size([360]) || layers.0.residual_group.blocks.5.mlp.fc1.bias
+ | -0.000 | -0.082 |  0.089 |  0.020 | torch.Size([180, 360]) || layers.0.residual_group.blocks.5.mlp.fc2.weight
+ | -0.000 | -0.006 |  0.006 |  0.003 | torch.Size([180]) || layers.0.residual_group.blocks.5.mlp.fc2.bias
+ | -0.000 | -0.033 |  0.033 |  0.014 | torch.Size([180, 180, 3, 3]) || layers.0.conv.weight
+ | -0.003 | -0.027 |  0.027 |  0.014 | torch.Size([180]) || layers.0.conv.bias
+ |  0.999 |  0.990 |  1.004 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.0.norm1.weight
+ |  0.000 | -0.005 |  0.006 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.0.norm1.bias
+ |  0.000 | -0.075 |  0.066 |  0.019 | torch.Size([225, 6]) || layers.1.residual_group.blocks.0.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.1.residual_group.blocks.0.attn.relative_position_index
+ | -0.000 | -0.088 |  0.100 |  0.022 | torch.Size([540, 180]) || layers.1.residual_group.blocks.0.attn.qkv.weight
+ | -0.001 | -0.026 |  0.027 |  0.007 | torch.Size([540]) || layers.1.residual_group.blocks.0.attn.qkv.bias
+ |  0.000 | -0.075 |  0.077 |  0.020 | torch.Size([180, 180]) || layers.1.residual_group.blocks.0.attn.proj.weight
+ | -0.000 | -0.007 |  0.008 |  0.003 | torch.Size([180]) || layers.1.residual_group.blocks.0.attn.proj.bias
+ |  1.000 |  0.991 |  1.007 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.0.norm2.weight
+ | -0.000 | -0.006 |  0.006 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.0.norm2.bias
+ | -0.000 | -0.087 |  0.096 |  0.020 | torch.Size([360, 180]) || layers.1.residual_group.blocks.0.mlp.fc1.weight
+ | -0.001 | -0.013 |  0.007 |  0.003 | torch.Size([360]) || layers.1.residual_group.blocks.0.mlp.fc1.bias
+ |  0.000 | -0.080 |  0.090 |  0.020 | torch.Size([180, 360]) || layers.1.residual_group.blocks.0.mlp.fc2.weight
+ | -0.000 | -0.007 |  0.006 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.0.mlp.fc2.bias
+ | -15.972 | -100.000 |  0.000 | 36.635 | torch.Size([36, 64, 64]) || layers.1.residual_group.blocks.1.attn_mask
+ |  0.999 |  0.992 |  1.005 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.1.norm1.weight
+ | -0.000 | -0.006 |  0.006 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.1.norm1.bias
+ |  0.000 | -0.070 |  0.065 |  0.020 | torch.Size([225, 6]) || layers.1.residual_group.blocks.1.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.1.residual_group.blocks.1.attn.relative_position_index
+ |  0.000 | -0.094 |  0.096 |  0.022 | torch.Size([540, 180]) || layers.1.residual_group.blocks.1.attn.qkv.weight
+ | -0.000 | -0.026 |  0.027 |  0.008 | torch.Size([540]) || layers.1.residual_group.blocks.1.attn.qkv.bias
+ | -0.000 | -0.079 |  0.087 |  0.020 | torch.Size([180, 180]) || layers.1.residual_group.blocks.1.attn.proj.weight
+ | -0.000 | -0.007 |  0.007 |  0.003 | torch.Size([180]) || layers.1.residual_group.blocks.1.attn.proj.bias
+ |  0.999 |  0.991 |  1.009 |  0.003 | torch.Size([180]) || layers.1.residual_group.blocks.1.norm2.weight
+ | -0.000 | -0.006 |  0.006 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.1.norm2.bias
+ | -0.000 | -0.083 |  0.084 |  0.020 | torch.Size([360, 180]) || layers.1.residual_group.blocks.1.mlp.fc1.weight
+ | -0.001 | -0.010 |  0.004 |  0.002 | torch.Size([360]) || layers.1.residual_group.blocks.1.mlp.fc1.bias
+ |  0.000 | -0.084 |  0.088 |  0.020 | torch.Size([180, 360]) || layers.1.residual_group.blocks.1.mlp.fc2.weight
+ | -0.000 | -0.006 |  0.006 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.1.mlp.fc2.bias
+ |  0.999 |  0.993 |  1.004 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.2.norm1.weight
+ | -0.000 | -0.005 |  0.007 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.2.norm1.bias
+ |  0.000 | -0.059 |  0.066 |  0.020 | torch.Size([225, 6]) || layers.1.residual_group.blocks.2.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.1.residual_group.blocks.2.attn.relative_position_index
+ | -0.000 | -0.100 |  0.101 |  0.022 | torch.Size([540, 180]) || layers.1.residual_group.blocks.2.attn.qkv.weight
+ |  0.000 | -0.031 |  0.030 |  0.008 | torch.Size([540]) || layers.1.residual_group.blocks.2.attn.qkv.bias
+ |  0.000 | -0.086 |  0.075 |  0.020 | torch.Size([180, 180]) || layers.1.residual_group.blocks.2.attn.proj.weight
+ | -0.000 | -0.006 |  0.006 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.2.attn.proj.bias
+ |  1.000 |  0.988 |  1.007 |  0.003 | torch.Size([180]) || layers.1.residual_group.blocks.2.norm2.weight
+ |  0.000 | -0.008 |  0.012 |  0.003 | torch.Size([180]) || layers.1.residual_group.blocks.2.norm2.bias
+ | -0.000 | -0.089 |  0.085 |  0.020 | torch.Size([360, 180]) || layers.1.residual_group.blocks.2.mlp.fc1.weight
+ | -0.000 | -0.012 |  0.009 |  0.003 | torch.Size([360]) || layers.1.residual_group.blocks.2.mlp.fc1.bias
+ |  0.000 | -0.092 |  0.080 |  0.020 | torch.Size([180, 360]) || layers.1.residual_group.blocks.2.mlp.fc2.weight
+ | -0.000 | -0.007 |  0.006 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.2.mlp.fc2.bias
+ | -15.972 | -100.000 |  0.000 | 36.635 | torch.Size([36, 64, 64]) || layers.1.residual_group.blocks.3.attn_mask
+ |  0.998 |  0.989 |  1.007 |  0.003 | torch.Size([180]) || layers.1.residual_group.blocks.3.norm1.weight
+ |  0.000 | -0.007 |  0.007 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.3.norm1.bias
+ | -0.000 | -0.074 |  0.068 |  0.020 | torch.Size([225, 6]) || layers.1.residual_group.blocks.3.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.1.residual_group.blocks.3.attn.relative_position_index
+ | -0.000 | -0.101 |  0.093 |  0.022 | torch.Size([540, 180]) || layers.1.residual_group.blocks.3.attn.qkv.weight
+ |  0.000 | -0.027 |  0.032 |  0.006 | torch.Size([540]) || layers.1.residual_group.blocks.3.attn.qkv.bias
+ | -0.000 | -0.089 |  0.087 |  0.020 | torch.Size([180, 180]) || layers.1.residual_group.blocks.3.attn.proj.weight
+ | -0.000 | -0.007 |  0.007 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.3.attn.proj.bias
+ |  0.999 |  0.992 |  1.008 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.3.norm2.weight
+ |  0.000 | -0.005 |  0.008 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.3.norm2.bias
+ | -0.000 | -0.090 |  0.091 |  0.020 | torch.Size([360, 180]) || layers.1.residual_group.blocks.3.mlp.fc1.weight
+ | -0.000 | -0.007 |  0.005 |  0.002 | torch.Size([360]) || layers.1.residual_group.blocks.3.mlp.fc1.bias
+ |  0.000 | -0.077 |  0.081 |  0.020 | torch.Size([180, 360]) || layers.1.residual_group.blocks.3.mlp.fc2.weight
+ | -0.000 | -0.006 |  0.006 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.3.mlp.fc2.bias
+ |  0.998 |  0.991 |  1.004 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.4.norm1.weight
+ | -0.000 | -0.007 |  0.007 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.4.norm1.bias
+ | -0.000 | -0.066 |  0.060 |  0.020 | torch.Size([225, 6]) || layers.1.residual_group.blocks.4.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.1.residual_group.blocks.4.attn.relative_position_index
+ | -0.000 | -0.100 |  0.104 |  0.021 | torch.Size([540, 180]) || layers.1.residual_group.blocks.4.attn.qkv.weight
+ | -0.000 | -0.021 |  0.023 |  0.006 | torch.Size([540]) || layers.1.residual_group.blocks.4.attn.qkv.bias
+ |  0.000 | -0.081 |  0.086 |  0.020 | torch.Size([180, 180]) || layers.1.residual_group.blocks.4.attn.proj.weight
+ | -0.000 | -0.007 |  0.005 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.4.attn.proj.bias
+ |  0.999 |  0.988 |  1.006 |  0.003 | torch.Size([180]) || layers.1.residual_group.blocks.4.norm2.weight
+ |  0.000 | -0.006 |  0.006 |  0.003 | torch.Size([180]) || layers.1.residual_group.blocks.4.norm2.bias
+ | -0.000 | -0.086 |  0.092 |  0.020 | torch.Size([360, 180]) || layers.1.residual_group.blocks.4.mlp.fc1.weight
+ | -0.001 | -0.010 |  0.007 |  0.002 | torch.Size([360]) || layers.1.residual_group.blocks.4.mlp.fc1.bias
+ | -0.000 | -0.087 |  0.085 |  0.020 | torch.Size([180, 360]) || layers.1.residual_group.blocks.4.mlp.fc2.weight
+ | -0.000 | -0.007 |  0.006 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.4.mlp.fc2.bias
+ | -15.972 | -100.000 |  0.000 | 36.635 | torch.Size([36, 64, 64]) || layers.1.residual_group.blocks.5.attn_mask
+ |  0.999 |  0.992 |  1.006 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.5.norm1.weight
+ | -0.000 | -0.008 |  0.005 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.5.norm1.bias
+ |  0.000 | -0.063 |  0.060 |  0.020 | torch.Size([225, 6]) || layers.1.residual_group.blocks.5.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.1.residual_group.blocks.5.attn.relative_position_index
+ |  0.000 | -0.097 |  0.093 |  0.022 | torch.Size([540, 180]) || layers.1.residual_group.blocks.5.attn.qkv.weight
+ | -0.001 | -0.026 |  0.024 |  0.007 | torch.Size([540]) || layers.1.residual_group.blocks.5.attn.qkv.bias
+ |  0.000 | -0.083 |  0.088 |  0.020 | torch.Size([180, 180]) || layers.1.residual_group.blocks.5.attn.proj.weight
+ | -0.000 | -0.007 |  0.006 |  0.002 | torch.Size([180]) || layers.1.residual_group.blocks.5.attn.proj.bias
+ |  0.999 |  0.984 |  1.006 |  0.003 | torch.Size([180]) || layers.1.residual_group.blocks.5.norm2.weight
+ |  0.000 | -0.008 |  0.006 |  0.003 | torch.Size([180]) || layers.1.residual_group.blocks.5.norm2.bias
+ | -0.000 | -0.091 |  0.082 |  0.020 | torch.Size([360, 180]) || layers.1.residual_group.blocks.5.mlp.fc1.weight
+ | -0.001 | -0.009 |  0.006 |  0.003 | torch.Size([360]) || layers.1.residual_group.blocks.5.mlp.fc1.bias
+ |  0.000 | -0.085 |  0.079 |  0.020 | torch.Size([180, 360]) || layers.1.residual_group.blocks.5.mlp.fc2.weight
+ | -0.000 | -0.008 |  0.006 |  0.003 | torch.Size([180]) || layers.1.residual_group.blocks.5.mlp.fc2.bias
+ |  0.000 | -0.034 |  0.037 |  0.014 | torch.Size([180, 180, 3, 3]) || layers.1.conv.weight
+ |  0.001 | -0.026 |  0.026 |  0.014 | torch.Size([180]) || layers.1.conv.bias
+ |  0.999 |  0.994 |  1.006 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.0.norm1.weight
+ | -0.000 | -0.007 |  0.005 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.0.norm1.bias
+ |  0.001 | -0.062 |  0.060 |  0.020 | torch.Size([225, 6]) || layers.2.residual_group.blocks.0.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.2.residual_group.blocks.0.attn.relative_position_index
+ |  0.000 | -0.085 |  0.098 |  0.021 | torch.Size([540, 180]) || layers.2.residual_group.blocks.0.attn.qkv.weight
+ |  0.000 | -0.007 |  0.008 |  0.002 | torch.Size([540]) || layers.2.residual_group.blocks.0.attn.qkv.bias
+ |  0.000 | -0.080 |  0.090 |  0.020 | torch.Size([180, 180]) || layers.2.residual_group.blocks.0.attn.proj.weight
+ | -0.000 | -0.006 |  0.006 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.0.attn.proj.bias
+ |  1.000 |  0.994 |  1.008 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.0.norm2.weight
+ | -0.000 | -0.006 |  0.006 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.0.norm2.bias
+ | -0.000 | -0.086 |  0.081 |  0.020 | torch.Size([360, 180]) || layers.2.residual_group.blocks.0.mlp.fc1.weight
+ | -0.000 | -0.008 |  0.006 |  0.002 | torch.Size([360]) || layers.2.residual_group.blocks.0.mlp.fc1.bias
+ | -0.000 | -0.081 |  0.080 |  0.020 | torch.Size([180, 360]) || layers.2.residual_group.blocks.0.mlp.fc2.weight
+ | -0.000 | -0.007 |  0.006 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.0.mlp.fc2.bias
+ | -15.972 | -100.000 |  0.000 | 36.635 | torch.Size([36, 64, 64]) || layers.2.residual_group.blocks.1.attn_mask
+ |  0.999 |  0.994 |  1.005 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.1.norm1.weight
+ |  0.000 | -0.007 |  0.008 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.1.norm1.bias
+ | -0.001 | -0.069 |  0.060 |  0.020 | torch.Size([225, 6]) || layers.2.residual_group.blocks.1.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.2.residual_group.blocks.1.attn.relative_position_index
+ | -0.000 | -0.089 |  0.092 |  0.021 | torch.Size([540, 180]) || layers.2.residual_group.blocks.1.attn.qkv.weight
+ |  0.000 | -0.008 |  0.009 |  0.002 | torch.Size([540]) || layers.2.residual_group.blocks.1.attn.qkv.bias
+ |  0.000 | -0.079 |  0.080 |  0.020 | torch.Size([180, 180]) || layers.2.residual_group.blocks.1.attn.proj.weight
+ | -0.000 | -0.006 |  0.005 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.1.attn.proj.bias
+ |  1.000 |  0.995 |  1.009 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.1.norm2.weight
+ | -0.000 | -0.006 |  0.005 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.1.norm2.bias
+ |  0.000 | -0.087 |  0.082 |  0.020 | torch.Size([360, 180]) || layers.2.residual_group.blocks.1.mlp.fc1.weight
+ | -0.000 | -0.008 |  0.005 |  0.002 | torch.Size([360]) || layers.2.residual_group.blocks.1.mlp.fc1.bias
+ | -0.000 | -0.078 |  0.081 |  0.020 | torch.Size([180, 360]) || layers.2.residual_group.blocks.1.mlp.fc2.weight
+ | -0.000 | -0.005 |  0.005 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.1.mlp.fc2.bias
+ |  1.000 |  0.994 |  1.004 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.2.norm1.weight
+ | -0.000 | -0.008 |  0.007 |  0.003 | torch.Size([180]) || layers.2.residual_group.blocks.2.norm1.bias
+ | -0.000 | -0.071 |  0.073 |  0.020 | torch.Size([225, 6]) || layers.2.residual_group.blocks.2.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.2.residual_group.blocks.2.attn.relative_position_index
+ |  0.000 | -0.096 |  0.093 |  0.021 | torch.Size([540, 180]) || layers.2.residual_group.blocks.2.attn.qkv.weight
+ |  0.000 | -0.011 |  0.012 |  0.003 | torch.Size([540]) || layers.2.residual_group.blocks.2.attn.qkv.bias
+ |  0.000 | -0.080 |  0.082 |  0.020 | torch.Size([180, 180]) || layers.2.residual_group.blocks.2.attn.proj.weight
+ | -0.000 | -0.006 |  0.006 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.2.attn.proj.bias
+ |  1.000 |  0.993 |  1.011 |  0.003 | torch.Size([180]) || layers.2.residual_group.blocks.2.norm2.weight
+ |  0.000 | -0.006 |  0.006 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.2.norm2.bias
+ |  0.000 | -0.086 |  0.097 |  0.020 | torch.Size([360, 180]) || layers.2.residual_group.blocks.2.mlp.fc1.weight
+ | -0.000 | -0.009 |  0.007 |  0.002 | torch.Size([360]) || layers.2.residual_group.blocks.2.mlp.fc1.bias
+ | -0.000 | -0.081 |  0.078 |  0.020 | torch.Size([180, 360]) || layers.2.residual_group.blocks.2.mlp.fc2.weight
+ | -0.000 | -0.007 |  0.005 |  0.003 | torch.Size([180]) || layers.2.residual_group.blocks.2.mlp.fc2.bias
+ | -15.972 | -100.000 |  0.000 | 36.635 | torch.Size([36, 64, 64]) || layers.2.residual_group.blocks.3.attn_mask
+ |  0.999 |  0.994 |  1.006 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.3.norm1.weight
+ | -0.000 | -0.007 |  0.005 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.3.norm1.bias
+ |  0.000 | -0.064 |  0.065 |  0.020 | torch.Size([225, 6]) || layers.2.residual_group.blocks.3.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.2.residual_group.blocks.3.attn.relative_position_index
+ | -0.000 | -0.087 |  0.083 |  0.021 | torch.Size([540, 180]) || layers.2.residual_group.blocks.3.attn.qkv.weight
+ | -0.000 | -0.011 |  0.012 |  0.002 | torch.Size([540]) || layers.2.residual_group.blocks.3.attn.qkv.bias
+ |  0.000 | -0.089 |  0.078 |  0.020 | torch.Size([180, 180]) || layers.2.residual_group.blocks.3.attn.proj.weight
+ | -0.000 | -0.006 |  0.006 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.3.attn.proj.bias
+ |  1.000 |  0.990 |  1.008 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.3.norm2.weight
+ |  0.000 | -0.004 |  0.006 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.3.norm2.bias
+ | -0.000 | -0.074 |  0.086 |  0.020 | torch.Size([360, 180]) || layers.2.residual_group.blocks.3.mlp.fc1.weight
+ | -0.000 | -0.009 |  0.004 |  0.002 | torch.Size([360]) || layers.2.residual_group.blocks.3.mlp.fc1.bias
+ |  0.000 | -0.092 |  0.094 |  0.020 | torch.Size([180, 360]) || layers.2.residual_group.blocks.3.mlp.fc2.weight
+ | -0.000 | -0.006 |  0.005 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.3.mlp.fc2.bias
+ |  0.999 |  0.994 |  1.005 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.4.norm1.weight
+ |  0.000 | -0.008 |  0.008 |  0.003 | torch.Size([180]) || layers.2.residual_group.blocks.4.norm1.bias
+ | -0.000 | -0.070 |  0.064 |  0.021 | torch.Size([225, 6]) || layers.2.residual_group.blocks.4.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.2.residual_group.blocks.4.attn.relative_position_index
+ |  0.000 | -0.091 |  0.092 |  0.021 | torch.Size([540, 180]) || layers.2.residual_group.blocks.4.attn.qkv.weight
+ |  0.000 | -0.012 |  0.011 |  0.003 | torch.Size([540]) || layers.2.residual_group.blocks.4.attn.qkv.bias
+ |  0.000 | -0.087 |  0.082 |  0.020 | torch.Size([180, 180]) || layers.2.residual_group.blocks.4.attn.proj.weight
+ | -0.000 | -0.007 |  0.007 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.4.attn.proj.bias
+ |  1.000 |  0.995 |  1.011 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.4.norm2.weight
+ | -0.000 | -0.007 |  0.004 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.4.norm2.bias
+ |  0.000 | -0.089 |  0.082 |  0.020 | torch.Size([360, 180]) || layers.2.residual_group.blocks.4.mlp.fc1.weight
+ | -0.000 | -0.008 |  0.005 |  0.002 | torch.Size([360]) || layers.2.residual_group.blocks.4.mlp.fc1.bias
+ | -0.000 | -0.089 |  0.082 |  0.020 | torch.Size([180, 360]) || layers.2.residual_group.blocks.4.mlp.fc2.weight
+ | -0.000 | -0.005 |  0.004 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.4.mlp.fc2.bias
+ | -15.972 | -100.000 |  0.000 | 36.635 | torch.Size([36, 64, 64]) || layers.2.residual_group.blocks.5.attn_mask
+ |  0.999 |  0.995 |  1.005 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.5.norm1.weight
+ |  0.000 | -0.008 |  0.006 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.5.norm1.bias
+ | -0.000 | -0.074 |  0.063 |  0.020 | torch.Size([225, 6]) || layers.2.residual_group.blocks.5.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.2.residual_group.blocks.5.attn.relative_position_index
+ | -0.000 | -0.100 |  0.095 |  0.021 | torch.Size([540, 180]) || layers.2.residual_group.blocks.5.attn.qkv.weight
+ | -0.000 | -0.011 |  0.011 |  0.003 | torch.Size([540]) || layers.2.residual_group.blocks.5.attn.qkv.bias
+ | -0.000 | -0.081 |  0.090 |  0.020 | torch.Size([180, 180]) || layers.2.residual_group.blocks.5.attn.proj.weight
+ | -0.000 | -0.006 |  0.006 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.5.attn.proj.bias
+ |  1.000 |  0.990 |  1.006 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.5.norm2.weight
+ | -0.000 | -0.006 |  0.006 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.5.norm2.bias
+ |  0.000 | -0.094 |  0.084 |  0.020 | torch.Size([360, 180]) || layers.2.residual_group.blocks.5.mlp.fc1.weight
+ | -0.001 | -0.011 |  0.007 |  0.002 | torch.Size([360]) || layers.2.residual_group.blocks.5.mlp.fc1.bias
+ | -0.000 | -0.087 |  0.084 |  0.020 | torch.Size([180, 360]) || layers.2.residual_group.blocks.5.mlp.fc2.weight
+ | -0.000 | -0.006 |  0.006 |  0.002 | torch.Size([180]) || layers.2.residual_group.blocks.5.mlp.fc2.bias
+ | -0.000 | -0.033 |  0.036 |  0.014 | torch.Size([180, 180, 3, 3]) || layers.2.conv.weight
+ |  0.001 | -0.026 |  0.028 |  0.014 | torch.Size([180]) || layers.2.conv.bias
+ |  1.000 |  0.993 |  1.007 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.0.norm1.weight
+ |  0.000 | -0.009 |  0.008 |  0.003 | torch.Size([180]) || layers.3.residual_group.blocks.0.norm1.bias
+ |  0.000 | -0.068 |  0.060 |  0.020 | torch.Size([225, 6]) || layers.3.residual_group.blocks.0.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.3.residual_group.blocks.0.attn.relative_position_index
+ |  0.000 | -0.087 |  0.090 |  0.020 | torch.Size([540, 180]) || layers.3.residual_group.blocks.0.attn.qkv.weight
+ |  0.000 | -0.012 |  0.014 |  0.003 | torch.Size([540]) || layers.3.residual_group.blocks.0.attn.qkv.bias
+ | -0.000 | -0.081 |  0.080 |  0.020 | torch.Size([180, 180]) || layers.3.residual_group.blocks.0.attn.proj.weight
+ | -0.000 | -0.005 |  0.006 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.0.attn.proj.bias
+ |  1.000 |  0.995 |  1.008 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.0.norm2.weight
+ |  0.000 | -0.006 |  0.006 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.0.norm2.bias
+ | -0.000 | -0.093 |  0.086 |  0.020 | torch.Size([360, 180]) || layers.3.residual_group.blocks.0.mlp.fc1.weight
+ | -0.000 | -0.016 |  0.007 |  0.003 | torch.Size([360]) || layers.3.residual_group.blocks.0.mlp.fc1.bias
+ | -0.000 | -0.081 |  0.086 |  0.020 | torch.Size([180, 360]) || layers.3.residual_group.blocks.0.mlp.fc2.weight
+ | -0.000 | -0.006 |  0.006 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.0.mlp.fc2.bias
+ | -15.972 | -100.000 |  0.000 | 36.635 | torch.Size([36, 64, 64]) || layers.3.residual_group.blocks.1.attn_mask
+ |  1.000 |  0.995 |  1.005 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.1.norm1.weight
+ |  0.000 | -0.007 |  0.006 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.1.norm1.bias
+ | -0.001 | -0.065 |  0.069 |  0.020 | torch.Size([225, 6]) || layers.3.residual_group.blocks.1.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.3.residual_group.blocks.1.attn.relative_position_index
+ | -0.000 | -0.090 |  0.097 |  0.021 | torch.Size([540, 180]) || layers.3.residual_group.blocks.1.attn.qkv.weight
+ | -0.000 | -0.023 |  0.016 |  0.004 | torch.Size([540]) || layers.3.residual_group.blocks.1.attn.qkv.bias
+ | -0.000 | -0.090 |  0.083 |  0.020 | torch.Size([180, 180]) || layers.3.residual_group.blocks.1.attn.proj.weight
+ | -0.000 | -0.004 |  0.005 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.1.attn.proj.bias
+ |  1.000 |  0.996 |  1.006 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.1.norm2.weight
+ | -0.000 | -0.007 |  0.006 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.1.norm2.bias
+ | -0.000 | -0.084 |  0.079 |  0.020 | torch.Size([360, 180]) || layers.3.residual_group.blocks.1.mlp.fc1.weight
+ | -0.000 | -0.010 |  0.006 |  0.002 | torch.Size([360]) || layers.3.residual_group.blocks.1.mlp.fc1.bias
+ |  0.000 | -0.079 |  0.081 |  0.020 | torch.Size([180, 360]) || layers.3.residual_group.blocks.1.mlp.fc2.weight
+ | -0.000 | -0.005 |  0.005 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.1.mlp.fc2.bias
+ |  1.000 |  0.995 |  1.004 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.2.norm1.weight
+ | -0.000 | -0.006 |  0.005 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.2.norm1.bias
+ |  0.000 | -0.066 |  0.060 |  0.020 | torch.Size([225, 6]) || layers.3.residual_group.blocks.2.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.3.residual_group.blocks.2.attn.relative_position_index
+ | -0.000 | -0.086 |  0.087 |  0.021 | torch.Size([540, 180]) || layers.3.residual_group.blocks.2.attn.qkv.weight
+ |  0.000 | -0.012 |  0.016 |  0.003 | torch.Size([540]) || layers.3.residual_group.blocks.2.attn.qkv.bias
+ | -0.000 | -0.078 |  0.080 |  0.020 | torch.Size([180, 180]) || layers.3.residual_group.blocks.2.attn.proj.weight
+ | -0.000 | -0.005 |  0.005 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.2.attn.proj.bias
+ |  1.001 |  0.995 |  1.007 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.2.norm2.weight
+ |  0.000 | -0.008 |  0.006 |  0.003 | torch.Size([180]) || layers.3.residual_group.blocks.2.norm2.bias
+ | -0.000 | -0.097 |  0.084 |  0.020 | torch.Size([360, 180]) || layers.3.residual_group.blocks.2.mlp.fc1.weight
+ |  0.000 | -0.008 |  0.006 |  0.002 | torch.Size([360]) || layers.3.residual_group.blocks.2.mlp.fc1.bias
+ | -0.000 | -0.083 |  0.087 |  0.020 | torch.Size([180, 360]) || layers.3.residual_group.blocks.2.mlp.fc2.weight
+ | -0.000 | -0.005 |  0.005 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.2.mlp.fc2.bias
+ | -15.972 | -100.000 |  0.000 | 36.635 | torch.Size([36, 64, 64]) || layers.3.residual_group.blocks.3.attn_mask
+ |  1.000 |  0.995 |  1.007 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.3.norm1.weight
+ | -0.000 | -0.008 |  0.006 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.3.norm1.bias
+ |  0.000 | -0.071 |  0.062 |  0.020 | torch.Size([225, 6]) || layers.3.residual_group.blocks.3.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.3.residual_group.blocks.3.attn.relative_position_index
+ |  0.000 | -0.090 |  0.103 |  0.020 | torch.Size([540, 180]) || layers.3.residual_group.blocks.3.attn.qkv.weight
+ | -0.000 | -0.009 |  0.007 |  0.002 | torch.Size([540]) || layers.3.residual_group.blocks.3.attn.qkv.bias
+ |  0.000 | -0.079 |  0.076 |  0.020 | torch.Size([180, 180]) || layers.3.residual_group.blocks.3.attn.proj.weight
+ | -0.000 | -0.005 |  0.006 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.3.attn.proj.bias
+ |  1.000 |  0.996 |  1.007 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.3.norm2.weight
+ |  0.000 | -0.006 |  0.009 |  0.003 | torch.Size([180]) || layers.3.residual_group.blocks.3.norm2.bias
+ |  0.000 | -0.087 |  0.087 |  0.020 | torch.Size([360, 180]) || layers.3.residual_group.blocks.3.mlp.fc1.weight
+ | -0.000 | -0.008 |  0.008 |  0.002 | torch.Size([360]) || layers.3.residual_group.blocks.3.mlp.fc1.bias
+ | -0.000 | -0.081 |  0.086 |  0.020 | torch.Size([180, 360]) || layers.3.residual_group.blocks.3.mlp.fc2.weight
+ | -0.000 | -0.005 |  0.005 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.3.mlp.fc2.bias
+ |  1.000 |  0.995 |  1.006 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.4.norm1.weight
+ |  0.000 | -0.010 |  0.007 |  0.003 | torch.Size([180]) || layers.3.residual_group.blocks.4.norm1.bias
+ | -0.001 | -0.063 |  0.063 |  0.020 | torch.Size([225, 6]) || layers.3.residual_group.blocks.4.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.3.residual_group.blocks.4.attn.relative_position_index
+ |  0.000 | -0.091 |  0.102 |  0.021 | torch.Size([540, 180]) || layers.3.residual_group.blocks.4.attn.qkv.weight
+ |  0.000 | -0.015 |  0.012 |  0.003 | torch.Size([540]) || layers.3.residual_group.blocks.4.attn.qkv.bias
+ |  0.000 | -0.082 |  0.085 |  0.020 | torch.Size([180, 180]) || layers.3.residual_group.blocks.4.attn.proj.weight
+ | -0.000 | -0.005 |  0.006 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.4.attn.proj.bias
+ |  1.000 |  0.996 |  1.009 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.4.norm2.weight
+ |  0.000 | -0.004 |  0.006 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.4.norm2.bias
+ |  0.000 | -0.084 |  0.084 |  0.020 | torch.Size([360, 180]) || layers.3.residual_group.blocks.4.mlp.fc1.weight
+ | -0.000 | -0.006 |  0.007 |  0.002 | torch.Size([360]) || layers.3.residual_group.blocks.4.mlp.fc1.bias
+ |  0.000 | -0.089 |  0.079 |  0.020 | torch.Size([180, 360]) || layers.3.residual_group.blocks.4.mlp.fc2.weight
+ |  0.000 | -0.005 |  0.005 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.4.mlp.fc2.bias
+ | -15.972 | -100.000 |  0.000 | 36.635 | torch.Size([36, 64, 64]) || layers.3.residual_group.blocks.5.attn_mask
+ |  1.000 |  0.994 |  1.007 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.5.norm1.weight
+ | -0.000 | -0.008 |  0.006 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.5.norm1.bias
+ |  0.000 | -0.062 |  0.061 |  0.020 | torch.Size([225, 6]) || layers.3.residual_group.blocks.5.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.3.residual_group.blocks.5.attn.relative_position_index
+ | -0.000 | -0.083 |  0.087 |  0.020 | torch.Size([540, 180]) || layers.3.residual_group.blocks.5.attn.qkv.weight
+ | -0.000 | -0.010 |  0.012 |  0.002 | torch.Size([540]) || layers.3.residual_group.blocks.5.attn.qkv.bias
+ |  0.000 | -0.083 |  0.089 |  0.020 | torch.Size([180, 180]) || layers.3.residual_group.blocks.5.attn.proj.weight
+ | -0.000 | -0.005 |  0.006 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.5.attn.proj.bias
+ |  1.000 |  0.993 |  1.012 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.5.norm2.weight
+ | -0.000 | -0.005 |  0.006 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.5.norm2.bias
+ |  0.000 | -0.085 |  0.090 |  0.020 | torch.Size([360, 180]) || layers.3.residual_group.blocks.5.mlp.fc1.weight
+ | -0.000 | -0.008 |  0.008 |  0.002 | torch.Size([360]) || layers.3.residual_group.blocks.5.mlp.fc1.bias
+ | -0.000 | -0.080 |  0.083 |  0.020 | torch.Size([180, 360]) || layers.3.residual_group.blocks.5.mlp.fc2.weight
+ | -0.000 | -0.007 |  0.007 |  0.002 | torch.Size([180]) || layers.3.residual_group.blocks.5.mlp.fc2.bias
+ | -0.000 | -0.032 |  0.032 |  0.014 | torch.Size([180, 180, 3, 3]) || layers.3.conv.weight
+ | -0.001 | -0.026 |  0.027 |  0.014 | torch.Size([180]) || layers.3.conv.bias
+ |  1.001 |  0.997 |  1.011 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.0.norm1.weight
+ |  0.000 | -0.007 |  0.013 |  0.003 | torch.Size([180]) || layers.4.residual_group.blocks.0.norm1.bias
+ |  0.000 | -0.069 |  0.067 |  0.020 | torch.Size([225, 6]) || layers.4.residual_group.blocks.0.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.4.residual_group.blocks.0.attn.relative_position_index
+ |  0.000 | -0.096 |  0.086 |  0.020 | torch.Size([540, 180]) || layers.4.residual_group.blocks.0.attn.qkv.weight
+ | -0.000 | -0.013 |  0.013 |  0.003 | torch.Size([540]) || layers.4.residual_group.blocks.0.attn.qkv.bias
+ | -0.000 | -0.082 |  0.082 |  0.020 | torch.Size([180, 180]) || layers.4.residual_group.blocks.0.attn.proj.weight
+ | -0.000 | -0.007 |  0.007 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.0.attn.proj.bias
+ |  1.000 |  0.995 |  1.005 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.0.norm2.weight
+ |  0.000 | -0.004 |  0.006 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.0.norm2.bias
+ |  0.000 | -0.083 |  0.080 |  0.020 | torch.Size([360, 180]) || layers.4.residual_group.blocks.0.mlp.fc1.weight
+ | -0.000 | -0.005 |  0.006 |  0.002 | torch.Size([360]) || layers.4.residual_group.blocks.0.mlp.fc1.bias
+ | -0.000 | -0.077 |  0.083 |  0.020 | torch.Size([180, 360]) || layers.4.residual_group.blocks.0.mlp.fc2.weight
+ |  0.000 | -0.004 |  0.005 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.0.mlp.fc2.bias
+ | -15.972 | -100.000 |  0.000 | 36.635 | torch.Size([36, 64, 64]) || layers.4.residual_group.blocks.1.attn_mask
+ |  1.000 |  0.995 |  1.006 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.1.norm1.weight
+ | -0.000 | -0.005 |  0.004 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.1.norm1.bias
+ |  0.000 | -0.063 |  0.056 |  0.019 | torch.Size([225, 6]) || layers.4.residual_group.blocks.1.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.4.residual_group.blocks.1.attn.relative_position_index
+ |  0.000 | -0.101 |  0.086 |  0.020 | torch.Size([540, 180]) || layers.4.residual_group.blocks.1.attn.qkv.weight
+ | -0.000 | -0.007 |  0.013 |  0.002 | torch.Size([540]) || layers.4.residual_group.blocks.1.attn.qkv.bias
+ |  0.000 | -0.092 |  0.079 |  0.020 | torch.Size([180, 180]) || layers.4.residual_group.blocks.1.attn.proj.weight
+ |  0.000 | -0.004 |  0.006 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.1.attn.proj.bias
+ |  1.000 |  0.995 |  1.005 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.1.norm2.weight
+ | -0.000 | -0.004 |  0.007 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.1.norm2.bias
+ | -0.000 | -0.080 |  0.080 |  0.020 | torch.Size([360, 180]) || layers.4.residual_group.blocks.1.mlp.fc1.weight
+ |  0.000 | -0.005 |  0.006 |  0.002 | torch.Size([360]) || layers.4.residual_group.blocks.1.mlp.fc1.bias
+ |  0.000 | -0.090 |  0.098 |  0.020 | torch.Size([180, 360]) || layers.4.residual_group.blocks.1.mlp.fc2.weight
+ |  0.000 | -0.004 |  0.006 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.1.mlp.fc2.bias
+ |  1.000 |  0.996 |  1.008 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.2.norm1.weight
+ |  0.000 | -0.004 |  0.005 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.2.norm1.bias
+ |  0.000 | -0.069 |  0.064 |  0.020 | torch.Size([225, 6]) || layers.4.residual_group.blocks.2.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.4.residual_group.blocks.2.attn.relative_position_index
+ | -0.000 | -0.086 |  0.089 |  0.020 | torch.Size([540, 180]) || layers.4.residual_group.blocks.2.attn.qkv.weight
+ | -0.000 | -0.008 |  0.004 |  0.001 | torch.Size([540]) || layers.4.residual_group.blocks.2.attn.qkv.bias
+ | -0.000 | -0.084 |  0.089 |  0.020 | torch.Size([180, 180]) || layers.4.residual_group.blocks.2.attn.proj.weight
+ |  0.000 | -0.004 |  0.006 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.2.attn.proj.bias
+ |  1.001 |  0.997 |  1.008 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.2.norm2.weight
+ | -0.000 | -0.008 |  0.008 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.2.norm2.bias
+ | -0.000 | -0.077 |  0.076 |  0.020 | torch.Size([360, 180]) || layers.4.residual_group.blocks.2.mlp.fc1.weight
+ |  0.000 | -0.008 |  0.007 |  0.002 | torch.Size([360]) || layers.4.residual_group.blocks.2.mlp.fc1.bias
+ |  0.000 | -0.097 |  0.106 |  0.020 | torch.Size([180, 360]) || layers.4.residual_group.blocks.2.mlp.fc2.weight
+ |  0.000 | -0.005 |  0.006 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.2.mlp.fc2.bias
+ | -15.972 | -100.000 |  0.000 | 36.635 | torch.Size([36, 64, 64]) || layers.4.residual_group.blocks.3.attn_mask
+ |  1.000 |  0.996 |  1.006 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.3.norm1.weight
+ | -0.000 | -0.004 |  0.004 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.3.norm1.bias
+ | -0.000 | -0.064 |  0.062 |  0.020 | torch.Size([225, 6]) || layers.4.residual_group.blocks.3.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.4.residual_group.blocks.3.attn.relative_position_index
+ |  0.000 | -0.085 |  0.083 |  0.020 | torch.Size([540, 180]) || layers.4.residual_group.blocks.3.attn.qkv.weight
+ | -0.000 | -0.010 |  0.010 |  0.002 | torch.Size([540]) || layers.4.residual_group.blocks.3.attn.qkv.bias
+ |  0.000 | -0.082 |  0.082 |  0.020 | torch.Size([180, 180]) || layers.4.residual_group.blocks.3.attn.proj.weight
+ |  0.000 | -0.004 |  0.006 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.3.attn.proj.bias
+ |  1.001 |  0.996 |  1.014 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.3.norm2.weight
+ |  0.000 | -0.006 |  0.007 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.3.norm2.bias
+ |  0.000 | -0.085 |  0.092 |  0.020 | torch.Size([360, 180]) || layers.4.residual_group.blocks.3.mlp.fc1.weight
+ |  0.000 | -0.007 |  0.007 |  0.002 | torch.Size([360]) || layers.4.residual_group.blocks.3.mlp.fc1.bias
+ |  0.000 | -0.080 |  0.100 |  0.020 | torch.Size([180, 360]) || layers.4.residual_group.blocks.3.mlp.fc2.weight
+ |  0.000 | -0.005 |  0.006 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.3.mlp.fc2.bias
+ |  1.000 |  0.996 |  1.008 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.4.norm1.weight
+ |  0.000 | -0.006 |  0.008 |  0.003 | torch.Size([180]) || layers.4.residual_group.blocks.4.norm1.bias
+ | -0.001 | -0.083 |  0.063 |  0.020 | torch.Size([225, 6]) || layers.4.residual_group.blocks.4.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.4.residual_group.blocks.4.attn.relative_position_index
+ |  0.000 | -0.087 |  0.095 |  0.020 | torch.Size([540, 180]) || layers.4.residual_group.blocks.4.attn.qkv.weight
+ | -0.000 | -0.014 |  0.015 |  0.003 | torch.Size([540]) || layers.4.residual_group.blocks.4.attn.qkv.bias
+ | -0.000 | -0.077 |  0.093 |  0.020 | torch.Size([180, 180]) || layers.4.residual_group.blocks.4.attn.proj.weight
+ | -0.000 | -0.006 |  0.006 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.4.attn.proj.bias
+ |  1.000 |  0.995 |  1.008 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.4.norm2.weight
+ | -0.000 | -0.005 |  0.005 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.4.norm2.bias
+ | -0.000 | -0.087 |  0.081 |  0.020 | torch.Size([360, 180]) || layers.4.residual_group.blocks.4.mlp.fc1.weight
+ | -0.000 | -0.004 |  0.006 |  0.002 | torch.Size([360]) || layers.4.residual_group.blocks.4.mlp.fc1.bias
+ |  0.000 | -0.092 |  0.085 |  0.020 | torch.Size([180, 360]) || layers.4.residual_group.blocks.4.mlp.fc2.weight
+ |  0.000 | -0.004 |  0.005 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.4.mlp.fc2.bias
+ | -15.972 | -100.000 |  0.000 | 36.635 | torch.Size([36, 64, 64]) || layers.4.residual_group.blocks.5.attn_mask
+ |  1.000 |  0.993 |  1.005 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.5.norm1.weight
+ |  0.000 | -0.006 |  0.007 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.5.norm1.bias
+ |  0.001 | -0.055 |  0.069 |  0.020 | torch.Size([225, 6]) || layers.4.residual_group.blocks.5.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.4.residual_group.blocks.5.attn.relative_position_index
+ |  0.000 | -0.084 |  0.084 |  0.020 | torch.Size([540, 180]) || layers.4.residual_group.blocks.5.attn.qkv.weight
+ |  0.000 | -0.006 |  0.006 |  0.002 | torch.Size([540]) || layers.4.residual_group.blocks.5.attn.qkv.bias
+ | -0.000 | -0.097 |  0.079 |  0.020 | torch.Size([180, 180]) || layers.4.residual_group.blocks.5.attn.proj.weight
+ | -0.000 | -0.005 |  0.007 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.5.attn.proj.bias
+ |  1.000 |  0.995 |  1.006 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.5.norm2.weight
+ |  0.000 | -0.007 |  0.006 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.5.norm2.bias
+ |  0.000 | -0.080 |  0.087 |  0.020 | torch.Size([360, 180]) || layers.4.residual_group.blocks.5.mlp.fc1.weight
+ |  0.000 | -0.007 |  0.005 |  0.002 | torch.Size([360]) || layers.4.residual_group.blocks.5.mlp.fc1.bias
+ |  0.000 | -0.083 |  0.083 |  0.020 | torch.Size([180, 360]) || layers.4.residual_group.blocks.5.mlp.fc2.weight
+ |  0.000 | -0.004 |  0.005 |  0.002 | torch.Size([180]) || layers.4.residual_group.blocks.5.mlp.fc2.bias
+ |  0.000 | -0.038 |  0.033 |  0.014 | torch.Size([180, 180, 3, 3]) || layers.4.conv.weight
+ | -0.002 | -0.029 |  0.025 |  0.015 | torch.Size([180]) || layers.4.conv.bias
+ |  1.000 |  0.996 |  1.004 |  0.001 | torch.Size([180]) || layers.5.residual_group.blocks.0.norm1.weight
+ |  0.000 | -0.004 |  0.005 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.0.norm1.bias
+ | -0.001 | -0.074 |  0.069 |  0.020 | torch.Size([225, 6]) || layers.5.residual_group.blocks.0.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.5.residual_group.blocks.0.attn.relative_position_index
+ | -0.000 | -0.087 |  0.104 |  0.020 | torch.Size([540, 180]) || layers.5.residual_group.blocks.0.attn.qkv.weight
+ | -0.000 | -0.010 |  0.007 |  0.002 | torch.Size([540]) || layers.5.residual_group.blocks.0.attn.qkv.bias
+ | -0.000 | -0.077 |  0.088 |  0.020 | torch.Size([180, 180]) || layers.5.residual_group.blocks.0.attn.proj.weight
+ |  0.000 | -0.006 |  0.005 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.0.attn.proj.bias
+ |  1.000 |  0.997 |  1.005 |  0.001 | torch.Size([180]) || layers.5.residual_group.blocks.0.norm2.weight
+ | -0.000 | -0.006 |  0.004 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.0.norm2.bias
+ | -0.000 | -0.077 |  0.083 |  0.020 | torch.Size([360, 180]) || layers.5.residual_group.blocks.0.mlp.fc1.weight
+ | -0.000 | -0.004 |  0.008 |  0.002 | torch.Size([360]) || layers.5.residual_group.blocks.0.mlp.fc1.bias
+ | -0.000 | -0.093 |  0.088 |  0.020 | torch.Size([180, 360]) || layers.5.residual_group.blocks.0.mlp.fc2.weight
+ | -0.000 | -0.006 |  0.006 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.0.mlp.fc2.bias
+ | -15.972 | -100.000 |  0.000 | 36.635 | torch.Size([36, 64, 64]) || layers.5.residual_group.blocks.1.attn_mask
+ |  1.000 |  0.997 |  1.005 |  0.001 | torch.Size([180]) || layers.5.residual_group.blocks.1.norm1.weight
+ |  0.000 | -0.006 |  0.005 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.1.norm1.bias
+ | -0.001 | -0.076 |  0.062 |  0.020 | torch.Size([225, 6]) || layers.5.residual_group.blocks.1.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.5.residual_group.blocks.1.attn.relative_position_index
+ |  0.000 | -0.086 |  0.088 |  0.020 | torch.Size([540, 180]) || layers.5.residual_group.blocks.1.attn.qkv.weight
+ | -0.000 | -0.008 |  0.005 |  0.001 | torch.Size([540]) || layers.5.residual_group.blocks.1.attn.qkv.bias
+ |  0.000 | -0.079 |  0.082 |  0.020 | torch.Size([180, 180]) || layers.5.residual_group.blocks.1.attn.proj.weight
+ |  0.000 | -0.006 |  0.005 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.1.attn.proj.bias
+ |  1.000 |  0.997 |  1.015 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.1.norm2.weight
+ | -0.000 | -0.007 |  0.005 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.1.norm2.bias
+ | -0.000 | -0.086 |  0.089 |  0.020 | torch.Size([360, 180]) || layers.5.residual_group.blocks.1.mlp.fc1.weight
+ |  0.000 | -0.004 |  0.005 |  0.002 | torch.Size([360]) || layers.5.residual_group.blocks.1.mlp.fc1.bias
+ | -0.000 | -0.092 |  0.081 |  0.020 | torch.Size([180, 360]) || layers.5.residual_group.blocks.1.mlp.fc2.weight
+ |  0.000 | -0.006 |  0.005 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.1.mlp.fc2.bias
+ |  1.000 |  0.997 |  1.004 |  0.001 | torch.Size([180]) || layers.5.residual_group.blocks.2.norm1.weight
+ | -0.000 | -0.004 |  0.007 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.2.norm1.bias
+ | -0.001 | -0.070 |  0.064 |  0.020 | torch.Size([225, 6]) || layers.5.residual_group.blocks.2.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.5.residual_group.blocks.2.attn.relative_position_index
+ | -0.000 | -0.086 |  0.090 |  0.020 | torch.Size([540, 180]) || layers.5.residual_group.blocks.2.attn.qkv.weight
+ |  0.000 | -0.006 |  0.008 |  0.002 | torch.Size([540]) || layers.5.residual_group.blocks.2.attn.qkv.bias
+ | -0.000 | -0.080 |  0.087 |  0.020 | torch.Size([180, 180]) || layers.5.residual_group.blocks.2.attn.proj.weight
+ |  0.000 | -0.005 |  0.005 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.2.attn.proj.bias
+ |  1.000 |  0.996 |  1.007 |  0.001 | torch.Size([180]) || layers.5.residual_group.blocks.2.norm2.weight
+ | -0.000 | -0.004 |  0.005 |  0.001 | torch.Size([180]) || layers.5.residual_group.blocks.2.norm2.bias
+ | -0.000 | -0.092 |  0.082 |  0.020 | torch.Size([360, 180]) || layers.5.residual_group.blocks.2.mlp.fc1.weight
+ | -0.000 | -0.006 |  0.005 |  0.002 | torch.Size([360]) || layers.5.residual_group.blocks.2.mlp.fc1.bias
+ |  0.000 | -0.086 |  0.087 |  0.020 | torch.Size([180, 360]) || layers.5.residual_group.blocks.2.mlp.fc2.weight
+ | -0.000 | -0.005 |  0.005 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.2.mlp.fc2.bias
+ | -15.972 | -100.000 |  0.000 | 36.635 | torch.Size([36, 64, 64]) || layers.5.residual_group.blocks.3.attn_mask
+ |  1.000 |  0.997 |  1.005 |  0.001 | torch.Size([180]) || layers.5.residual_group.blocks.3.norm1.weight
+ | -0.000 | -0.005 |  0.003 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.3.norm1.bias
+ |  0.001 | -0.064 |  0.082 |  0.021 | torch.Size([225, 6]) || layers.5.residual_group.blocks.3.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.5.residual_group.blocks.3.attn.relative_position_index
+ | -0.000 | -0.087 |  0.083 |  0.020 | torch.Size([540, 180]) || layers.5.residual_group.blocks.3.attn.qkv.weight
+ | -0.000 | -0.005 |  0.004 |  0.001 | torch.Size([540]) || layers.5.residual_group.blocks.3.attn.qkv.bias
+ |  0.000 | -0.076 |  0.080 |  0.020 | torch.Size([180, 180]) || layers.5.residual_group.blocks.3.attn.proj.weight
+ |  0.000 | -0.005 |  0.006 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.3.attn.proj.bias
+ |  1.000 |  0.996 |  1.008 |  0.001 | torch.Size([180]) || layers.5.residual_group.blocks.3.norm2.weight
+ |  0.000 | -0.005 |  0.005 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.3.norm2.bias
+ | -0.000 | -0.083 |  0.082 |  0.020 | torch.Size([360, 180]) || layers.5.residual_group.blocks.3.mlp.fc1.weight
+ |  0.000 | -0.007 |  0.008 |  0.002 | torch.Size([360]) || layers.5.residual_group.blocks.3.mlp.fc1.bias
+ | -0.000 | -0.085 |  0.090 |  0.020 | torch.Size([180, 360]) || layers.5.residual_group.blocks.3.mlp.fc2.weight
+ | -0.000 | -0.005 |  0.005 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.3.mlp.fc2.bias
+ |  1.000 |  0.998 |  1.004 |  0.001 | torch.Size([180]) || layers.5.residual_group.blocks.4.norm1.weight
+ |  0.000 | -0.004 |  0.004 |  0.001 | torch.Size([180]) || layers.5.residual_group.blocks.4.norm1.bias
+ | -0.000 | -0.063 |  0.077 |  0.020 | torch.Size([225, 6]) || layers.5.residual_group.blocks.4.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.5.residual_group.blocks.4.attn.relative_position_index
+ | -0.000 | -0.089 |  0.093 |  0.020 | torch.Size([540, 180]) || layers.5.residual_group.blocks.4.attn.qkv.weight
+ |  0.000 | -0.009 |  0.007 |  0.002 | torch.Size([540]) || layers.5.residual_group.blocks.4.attn.qkv.bias
+ |  0.000 | -0.075 |  0.090 |  0.020 | torch.Size([180, 180]) || layers.5.residual_group.blocks.4.attn.proj.weight
+ | -0.000 | -0.005 |  0.005 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.4.attn.proj.bias
+ |  1.000 |  0.994 |  1.004 |  0.001 | torch.Size([180]) || layers.5.residual_group.blocks.4.norm2.weight
+ |  0.000 | -0.005 |  0.009 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.4.norm2.bias
+ | -0.000 | -0.098 |  0.081 |  0.020 | torch.Size([360, 180]) || layers.5.residual_group.blocks.4.mlp.fc1.weight
+ | -0.000 | -0.007 |  0.009 |  0.002 | torch.Size([360]) || layers.5.residual_group.blocks.4.mlp.fc1.bias
+ |  0.000 | -0.085 |  0.083 |  0.020 | torch.Size([180, 360]) || layers.5.residual_group.blocks.4.mlp.fc2.weight
+ | -0.000 | -0.005 |  0.006 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.4.mlp.fc2.bias
+ | -15.972 | -100.000 |  0.000 | 36.635 | torch.Size([36, 64, 64]) || layers.5.residual_group.blocks.5.attn_mask
+ |  1.000 |  0.997 |  1.008 |  0.001 | torch.Size([180]) || layers.5.residual_group.blocks.5.norm1.weight
+ | -0.000 | -0.005 |  0.005 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.5.norm1.bias
+ |  0.000 | -0.059 |  0.062 |  0.020 | torch.Size([225, 6]) || layers.5.residual_group.blocks.5.attn.relative_position_bias_table
+ | 112.000 |  0.000 | 224.000 | 48.719 | torch.Size([64, 64]) || layers.5.residual_group.blocks.5.attn.relative_position_index
+ |  0.000 | -0.089 |  0.088 |  0.020 | torch.Size([540, 180]) || layers.5.residual_group.blocks.5.attn.qkv.weight
+ |  0.000 | -0.004 |  0.005 |  0.001 | torch.Size([540]) || layers.5.residual_group.blocks.5.attn.qkv.bias
+ | -0.000 | -0.087 |  0.079 |  0.020 | torch.Size([180, 180]) || layers.5.residual_group.blocks.5.attn.proj.weight
+ |  0.000 | -0.006 |  0.006 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.5.attn.proj.bias
+ |  1.000 |  0.995 |  1.003 |  0.001 | torch.Size([180]) || layers.5.residual_group.blocks.5.norm2.weight
+ |  0.000 | -0.004 |  0.006 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.5.norm2.bias
+ |  0.000 | -0.086 |  0.084 |  0.020 | torch.Size([360, 180]) || layers.5.residual_group.blocks.5.mlp.fc1.weight
+ | -0.000 | -0.004 |  0.005 |  0.002 | torch.Size([360]) || layers.5.residual_group.blocks.5.mlp.fc1.bias
+ |  0.000 | -0.089 |  0.081 |  0.020 | torch.Size([180, 360]) || layers.5.residual_group.blocks.5.mlp.fc2.weight
+ |  0.000 | -0.005 |  0.005 |  0.002 | torch.Size([180]) || layers.5.residual_group.blocks.5.mlp.fc2.bias
+ | -0.000 | -0.036 |  0.036 |  0.014 | torch.Size([180, 180, 3, 3]) || layers.5.conv.weight
+ | -0.001 | -0.027 |  0.026 |  0.014 | torch.Size([180]) || layers.5.conv.bias
+ |  0.994 |  0.963 |  0.999 |  0.005 | torch.Size([180]) || norm.weight
+ | -0.000 | -0.020 |  0.030 |  0.006 | torch.Size([180]) || norm.bias
+ |  0.000 | -0.033 |  0.031 |  0.014 | torch.Size([180, 180, 3, 3]) || conv_after_body.weight
+ | -0.001 | -0.025 |  0.025 |  0.015 | torch.Size([180]) || conv_after_body.bias
+ |  0.000 | -0.034 |  0.033 |  0.014 | torch.Size([3, 180, 3, 3]) || conv_last.weight
+ |  0.010 | -0.007 |  0.022 |  0.015 | torch.Size([3]) || conv_last.bias
+
+export CUDA_VISIBLE_DEVICES=0,1,2,3
+number of GPUs is: 4
+LogHandlers setup!
+Random seed: 1090
+Number of HDR photos:  14582
+Number of SDR photos:  14582
+Dataset [DatasetSR - train_dataset] is created.
+Number of HDR photos:  1618
+Number of SDR photos:  1618
+Dataset [DatasetSR - test_dataset] is created.
+Pass this initialization! Initialization was done during network definition!
+Pass this initialization! Initialization was done during network definition!
+Training model [ModelPlain] is created.
+Loading model for G [SwinITMO/ITMO TRAINING/models/1100_G.pth] ...
+Loading model for E [SwinITMO/ITMO TRAINING/models/1100_E.pth] ...
+Loading optimizerG [SwinITMO/ITMO TRAINING/models/1100_optimizerG.pth] ...
+/home/slee67/ENV/lib/python3.10/site-packages/torch/optim/lr_scheduler.py:138: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn("Detected call of `lr_scheduler.step()` before `optimizer.step()`. "
+/home/slee67/ENV/lib/python3.10/site-packages/torch/optim/lr_scheduler.py:163: UserWarning: The epoch parameter in `scheduler.step()` was not necessary and is being deprecated where possible. Please use `scheduler.step()` to step the scheduler. During the deprecation, if epoch is different from None, the closed form is used instead of the new chainable form, where available. Please open an issue if you are unable to replicate your use case: https://github.com/pytorch/pytorch/issues/new/choose.
+  warnings.warn(EPOCH_DEPRECATION_WARNING, UserWarning)
+/home/slee67/ENV/lib/python3.10/site-packages/torch/optim/lr_scheduler.py:429: UserWarning: To get the last learning rate computed by the scheduler, please use `get_last_lr()`.
+  warnings.warn("To get the last learning rate computed by the scheduler, "
+23-04-19 05:12:47.070 : <epoch:  0, iter:   1,101, lr:2.000e-04> G_loss: 3.679e-02 
+23-04-19 05:12:47.993 : <epoch:  0, iter:   1,102, lr:2.000e-04> G_loss: 4.190e-02 
+23-04-19 05:12:48.912 : <epoch:  0, iter:   1,103, lr:2.000e-04> G_loss: 8.495e-02 
+23-04-19 05:12:50.029 : <epoch:  0, iter:   1,104, lr:2.000e-04> G_loss: 5.751e-02 
+23-04-19 05:12:51.258 : <epoch:  0, iter:   1,105, lr:2.000e-04> G_loss: 2.675e-02 
+23-04-19 05:12:52.896 : <epoch:  0, iter:   1,106, lr:2.000e-04> G_loss: 6.969e-02 
+23-04-19 05:12:54.479 : <epoch:  0, iter:   1,107, lr:2.000e-04> G_loss: 5.372e-02 
+23-04-19 05:12:56.341 : <epoch:  0, iter:   1,108, lr:2.000e-04> G_loss: 5.151e-02 
+23-04-19 05:12:58.551 : <epoch:  0, iter:   1,109, lr:2.000e-04> G_loss: 4.352e-02 
+23-04-19 05:13:01.105 : <epoch:  0, iter:   1,110, lr:2.000e-04> G_loss: 6.037e-02 
+23-04-19 05:13:03.598 : <epoch:  0, iter:   1,111, lr:2.000e-04> G_loss: 3.176e-02 
+23-04-19 05:13:06.420 : <epoch:  0, iter:   1,112, lr:2.000e-04> G_loss: 6.762e-02 
+23-04-19 05:13:09.236 : <epoch:  0, iter:   1,113, lr:2.000e-04> G_loss: 7.050e-02 
+23-04-19 05:13:12.386 : <epoch:  0, iter:   1,114, lr:2.000e-04> G_loss: 6.250e-02 
+23-04-19 05:13:16.470 : <epoch:  0, iter:   1,115, lr:2.000e-04> G_loss: 5.608e-02 
+23-04-19 05:13:20.031 : <epoch:  0, iter:   1,116, lr:2.000e-04> G_loss: 5.251e-02 
+23-04-19 05:13:23.844 : <epoch:  0, iter:   1,117, lr:2.000e-04> G_loss: 3.706e-02 
+23-04-19 05:13:27.666 : <epoch:  0, iter:   1,118, lr:2.000e-04> G_loss: 3.517e-02 
+23-04-19 05:13:31.322 : <epoch:  0, iter:   1,119, lr:2.000e-04> G_loss: 2.389e-02 
+23-04-19 05:13:36.016 : <epoch:  0, iter:   1,120, lr:2.000e-04> G_loss: 4.491e-02 
+23-04-19 05:13:39.836 : <epoch:  0, iter:   1,121, lr:2.000e-04> G_loss: 8.804e-02 
+23-04-19 05:13:43.611 : <epoch:  0, iter:   1,122, lr:2.000e-04> G_loss: 3.232e-02 
+23-04-19 05:13:47.657 : <epoch:  0, iter:   1,123, lr:2.000e-04> G_loss: 4.936e-02 
+23-04-19 05:13:51.429 : <epoch:  0, iter:   1,124, lr:2.000e-04> G_loss: 5.123e-02 
+23-04-19 05:13:55.654 : <epoch:  0, iter:   1,125, lr:2.000e-04> G_loss: 3.277e-02 
+23-04-19 05:13:59.655 : <epoch:  0, iter:   1,126, lr:2.000e-04> G_loss: 1.425e-01 
+23-04-19 05:14:03.313 : <epoch:  0, iter:   1,127, lr:2.000e-04> G_loss: 5.508e-02 
+23-04-19 05:14:07.093 : <epoch:  0, iter:   1,128, lr:2.000e-04> G_loss: 9.009e-02 
+23-04-19 05:14:11.776 : <epoch:  0, iter:   1,129, lr:2.000e-04> G_loss: 3.260e-02 
+23-04-19 05:14:15.660 : <epoch:  0, iter:   1,130, lr:2.000e-04> G_loss: 4.425e-02 
+23-04-19 05:14:19.725 : <epoch:  0, iter:   1,131, lr:2.000e-04> G_loss: 7.391e-02 
+23-04-19 05:14:23.428 : <epoch:  0, iter:   1,132, lr:2.000e-04> G_loss: 3.367e-02 
+23-04-19 05:14:27.389 : <epoch:  0, iter:   1,133, lr:2.000e-04> G_loss: 3.992e-02 
+23-04-19 05:14:31.962 : <epoch:  0, iter:   1,134, lr:2.000e-04> G_loss: 7.330e-02 
+23-04-19 05:14:35.468 : <epoch:  0, iter:   1,135, lr:2.000e-04> G_loss: 3.346e-02 
+23-04-19 05:14:39.057 : <epoch:  0, iter:   1,136, lr:2.000e-04> G_loss: 4.525e-02 
+23-04-19 05:14:42.799 : <epoch:  0, iter:   1,137, lr:2.000e-04> G_loss: 4.425e-02 
+23-04-19 05:14:46.694 : <epoch:  0, iter:   1,138, lr:2.000e-04> G_loss: 5.613e-02 
+23-04-19 05:14:51.380 : <epoch:  0, iter:   1,139, lr:2.000e-04> G_loss: 4.100e-02 
+23-04-19 05:14:54.842 : <epoch:  0, iter:   1,140, lr:2.000e-04> G_loss: 4.705e-02 
+23-04-19 05:14:58.647 : <epoch:  0, iter:   1,141, lr:2.000e-04> G_loss: 2.958e-02 
+23-04-19 05:15:02.578 : <epoch:  0, iter:   1,142, lr:2.000e-04> G_loss: 3.404e-02 
+23-04-19 05:15:07.013 : <epoch:  0, iter:   1,143, lr:2.000e-04> G_loss: 4.625e-02 
+23-04-19 05:15:10.632 : <epoch:  0, iter:   1,144, lr:2.000e-04> G_loss: 7.629e-02 
+23-04-19 05:15:14.607 : <epoch:  0, iter:   1,145, lr:2.000e-04> G_loss: 7.709e-02 
+23-04-19 05:15:18.580 : <epoch:  0, iter:   1,146, lr:2.000e-04> G_loss: 4.745e-02 
+23-04-19 05:15:22.396 : <epoch:  0, iter:   1,147, lr:2.000e-04> G_loss: 6.303e-02 
+23-04-19 05:15:27.343 : <epoch:  0, iter:   1,148, lr:2.000e-04> G_loss: 6.803e-02 
+23-04-19 05:15:31.376 : <epoch:  0, iter:   1,149, lr:2.000e-04> G_loss: 5.521e-02 
+23-04-19 05:15:35.050 : <epoch:  0, iter:   1,150, lr:2.000e-04> G_loss: 2.841e-02 
+23-04-19 05:15:38.760 : <epoch:  0, iter:   1,151, lr:2.000e-04> G_loss: 2.015e-02 
+23-04-19 05:15:42.750 : <epoch:  0, iter:   1,152, lr:2.000e-04> G_loss: 3.555e-02 
+23-04-19 05:15:47.312 : <epoch:  0, iter:   1,153, lr:2.000e-04> G_loss: 1.044e-01 
+23-04-19 05:15:51.072 : <epoch:  0, iter:   1,154, lr:2.000e-04> G_loss: 6.192e-02 
+23-04-19 05:15:54.813 : <epoch:  0, iter:   1,155, lr:2.000e-04> G_loss: 5.553e-02 
+23-04-19 05:15:58.706 : <epoch:  0, iter:   1,156, lr:2.000e-04> G_loss: 7.705e-02 
+23-04-19 05:16:02.425 : <epoch:  0, iter:   1,157, lr:2.000e-04> G_loss: 3.497e-02 
+23-04-19 05:16:07.048 : <epoch:  0, iter:   1,158, lr:2.000e-04> G_loss: 2.944e-02 
+23-04-19 05:16:10.985 : <epoch:  0, iter:   1,159, lr:2.000e-04> G_loss: 2.514e-02 
+23-04-19 05:16:14.929 : <epoch:  0, iter:   1,160, lr:2.000e-04> G_loss: 6.376e-02 
+23-04-19 05:16:18.596 : <epoch:  0, iter:   1,161, lr:2.000e-04> G_loss: 5.268e-02 
+23-04-19 05:16:23.385 : <epoch:  0, iter:   1,162, lr:2.000e-04> G_loss: 4.489e-02 
+23-04-19 05:16:27.029 : <epoch:  0, iter:   1,163, lr:2.000e-04> G_loss: 3.660e-02 
+23-04-19 05:16:30.776 : <epoch:  0, iter:   1,164, lr:2.000e-04> G_loss: 7.787e-02 
+23-04-19 05:16:34.843 : <epoch:  0, iter:   1,165, lr:2.000e-04> G_loss: 5.580e-02 
+23-04-19 05:16:38.215 : <epoch:  0, iter:   1,166, lr:2.000e-04> G_loss: 7.672e-02 
+23-04-19 05:16:43.013 : <epoch:  0, iter:   1,167, lr:2.000e-04> G_loss: 5.829e-02 
+23-04-19 05:16:46.741 : <epoch:  0, iter:   1,168, lr:2.000e-04> G_loss: 7.022e-02 
+23-04-19 05:16:50.583 : <epoch:  0, iter:   1,169, lr:2.000e-04> G_loss: 5.860e-02 
+23-04-19 05:16:54.089 : <epoch:  0, iter:   1,170, lr:2.000e-04> G_loss: 3.101e-02 
+23-04-19 05:16:57.997 : <epoch:  0, iter:   1,171, lr:2.000e-04> G_loss: 3.277e-02 
+23-04-19 05:17:02.546 : <epoch:  0, iter:   1,172, lr:2.000e-04> G_loss: 9.819e-02 
+23-04-19 05:17:06.253 : <epoch:  0, iter:   1,173, lr:2.000e-04> G_loss: 2.317e-02 
+23-04-19 05:17:09.891 : <epoch:  0, iter:   1,174, lr:2.000e-04> G_loss: 7.372e-02 
+23-04-19 05:17:13.774 : <epoch:  0, iter:   1,175, lr:2.000e-04> G_loss: 2.092e-02 
+23-04-19 05:17:18.195 : <epoch:  0, iter:   1,176, lr:2.000e-04> G_loss: 3.059e-02 
+23-04-19 05:17:21.851 : <epoch:  0, iter:   1,177, lr:2.000e-04> G_loss: 3.546e-02 
+23-04-19 05:17:25.400 : <epoch:  0, iter:   1,178, lr:2.000e-04> G_loss: 3.607e-02 
+23-04-19 05:17:29.433 : <epoch:  0, iter:   1,179, lr:2.000e-04> G_loss: 4.066e-02 
+23-04-19 05:17:33.012 : <epoch:  0, iter:   1,180, lr:2.000e-04> G_loss: 4.618e-02 
+23-04-19 05:17:37.835 : <epoch:  0, iter:   1,181, lr:2.000e-04> G_loss: 3.114e-02 
+23-04-19 05:17:41.430 : <epoch:  0, iter:   1,182, lr:2.000e-04> G_loss: 9.083e-02 
+23-04-19 05:17:45.299 : <epoch:  0, iter:   1,183, lr:2.000e-04> G_loss: 3.720e-02 
+23-04-19 05:17:49.062 : <epoch:  0, iter:   1,184, lr:2.000e-04> G_loss: 2.896e-02 
+23-04-19 05:17:52.756 : <epoch:  0, iter:   1,185, lr:2.000e-04> G_loss: 5.148e-02 
+23-04-19 05:17:57.131 : <epoch:  0, iter:   1,186, lr:2.000e-04> G_loss: 3.369e-02 
+23-04-19 05:18:00.881 : <epoch:  0, iter:   1,187, lr:2.000e-04> G_loss: 4.357e-02 
+23-04-19 05:18:04.660 : <epoch:  0, iter:   1,188, lr:2.000e-04> G_loss: 3.235e-02 
+23-04-19 05:18:08.342 : <epoch:  0, iter:   1,189, lr:2.000e-04> G_loss: 4.586e-02 
+23-04-19 05:18:12.590 : <epoch:  0, iter:   1,190, lr:2.000e-04> G_loss: 2.412e-02 
+23-04-19 05:18:20.669 : <epoch:  0, iter:   1,191, lr:2.000e-04> G_loss: 3.498e-02 
+23-04-19 05:18:24.277 : <epoch:  0, iter:   1,192, lr:2.000e-04> G_loss: 1.161e-01 
+23-04-19 05:18:27.919 : <epoch:  0, iter:   1,193, lr:2.000e-04> G_loss: 3.462e-02 
+23-04-19 05:18:31.714 : <epoch:  0, iter:   1,194, lr:2.000e-04> G_loss: 4.219e-02 
+23-04-19 05:18:36.276 : <epoch:  0, iter:   1,195, lr:2.000e-04> G_loss: 5.564e-02 
+23-04-19 05:18:39.826 : <epoch:  0, iter:   1,196, lr:2.000e-04> G_loss: 3.455e-02 
+23-04-19 05:18:43.713 : <epoch:  0, iter:   1,197, lr:2.000e-04> G_loss: 7.976e-02 
+23-04-19 05:18:47.191 : <epoch:  0, iter:   1,198, lr:2.000e-04> G_loss: 3.428e-02 
+23-04-19 05:18:51.199 : <epoch:  0, iter:   1,199, lr:2.000e-04> G_loss: 5.290e-02 
+23-04-19 05:18:55.618 : <epoch:  0, iter:   1,200, lr:2.000e-04> G_loss: 3.854e-02 
+23-04-19 05:18:55.619 : Saving the model.
+23-04-19 05:19:05.037 : <epoch:  0, iter:   1,201, lr:2.000e-04> G_loss: 8.735e-02 
+23-04-19 05:19:08.636 : <epoch:  0, iter:   1,202, lr:2.000e-04> G_loss: 6.120e-02 
+23-04-19 05:19:12.652 : <epoch:  0, iter:   1,203, lr:2.000e-04> G_loss: 8.851e-02 
+23-04-19 05:19:16.968 : <epoch:  0, iter:   1,204, lr:2.000e-04> G_loss: 3.485e-02 
+23-04-19 05:19:20.745 : <epoch:  0, iter:   1,205, lr:2.000e-04> G_loss: 3.091e-02 
+23-04-19 05:19:24.424 : <epoch:  0, iter:   1,206, lr:2.000e-04> G_loss: 3.784e-02 
+23-04-19 05:19:28.793 : <epoch:  0, iter:   1,207, lr:2.000e-04> G_loss: 9.035e-02 
+23-04-19 05:19:32.990 : <epoch:  0, iter:   1,208, lr:2.000e-04> G_loss: 5.810e-02 
+23-04-19 05:19:37.475 : <epoch:  0, iter:   1,209, lr:2.000e-04> G_loss: 4.159e-02 
+23-04-19 05:19:41.159 : <epoch:  0, iter:   1,210, lr:2.000e-04> G_loss: 3.605e-02 
+23-04-19 05:19:45.050 : <epoch:  0, iter:   1,211, lr:2.000e-04> G_loss: 3.737e-02 
+23-04-19 05:19:49.151 : <epoch:  0, iter:   1,212, lr:2.000e-04> G_loss: 3.619e-02 
+23-04-19 05:19:53.748 : <epoch:  0, iter:   1,213, lr:2.000e-04> G_loss: 5.243e-02 
+23-04-19 05:19:57.635 : <epoch:  0, iter:   1,214, lr:2.000e-04> G_loss: 3.801e-02 
+23-04-19 05:20:03.854 : <epoch:  0, iter:   1,215, lr:2.000e-04> G_loss: 5.484e-02 
+23-04-19 05:20:08.161 : <epoch:  0, iter:   1,216, lr:2.000e-04> G_loss: 4.240e-02 
+23-04-19 05:20:21.401 : <epoch:  0, iter:   1,217, lr:2.000e-04> G_loss: 7.376e-02 
+23-04-19 05:20:25.920 : <epoch:  0, iter:   1,218, lr:2.000e-04> G_loss: 4.059e-02 
+23-04-19 05:20:29.943 : <epoch:  0, iter:   1,219, lr:2.000e-04> G_loss: 2.562e-02 
+23-04-19 05:20:33.597 : <epoch:  0, iter:   1,220, lr:2.000e-04> G_loss: 5.231e-02 
+23-04-19 05:20:37.261 : <epoch:  0, iter:   1,221, lr:2.000e-04> G_loss: 5.541e-02 
+23-04-19 05:20:41.204 : <epoch:  0, iter:   1,222, lr:2.000e-04> G_loss: 3.342e-02 
+23-04-19 05:20:45.991 : <epoch:  0, iter:   1,223, lr:2.000e-04> G_loss: 5.675e-02 
+23-04-19 05:20:49.657 : <epoch:  0, iter:   1,224, lr:2.000e-04> G_loss: 4.808e-02 
+23-04-19 05:20:57.775 : <epoch:  0, iter:   1,225, lr:2.000e-04> G_loss: 5.800e-02 
+23-04-19 05:21:01.326 : <epoch:  0, iter:   1,226, lr:2.000e-04> G_loss: 6.439e-02 
+23-04-19 05:21:06.002 : <epoch:  0, iter:   1,227, lr:2.000e-04> G_loss: 3.178e-02 
+23-04-19 05:21:09.505 : <epoch:  0, iter:   1,228, lr:2.000e-04> G_loss: 7.149e-02 
+23-04-19 05:21:13.297 : <epoch:  0, iter:   1,229, lr:2.000e-04> G_loss: 9.658e-02 
+23-04-19 05:21:17.120 : <epoch:  0, iter:   1,230, lr:2.000e-04> G_loss: 4.414e-02 
+23-04-19 05:21:22.708 : <epoch:  0, iter:   1,231, lr:2.000e-04> G_loss: 7.038e-02 
+23-04-19 05:21:27.364 : <epoch:  0, iter:   1,232, lr:2.000e-04> G_loss: 3.545e-02 
+23-04-19 05:21:35.955 : <epoch:  0, iter:   1,233, lr:2.000e-04> G_loss: 4.964e-02 
+23-04-19 05:21:39.487 : <epoch:  0, iter:   1,234, lr:2.000e-04> G_loss: 3.237e-02 
+23-04-19 05:21:43.431 : <epoch:  0, iter:   1,235, lr:2.000e-04> G_loss: 7.623e-02 
+23-04-19 05:21:47.140 : <epoch:  0, iter:   1,236, lr:2.000e-04> G_loss: 4.144e-02 
+23-04-19 05:21:52.099 : <epoch:  0, iter:   1,237, lr:2.000e-04> G_loss: 6.297e-02 
+23-04-19 05:21:55.957 : <epoch:  0, iter:   1,238, lr:2.000e-04> G_loss: 8.966e-02 
+23-04-19 05:21:59.837 : <epoch:  0, iter:   1,239, lr:2.000e-04> G_loss: 4.205e-02 
+23-04-19 05:22:03.356 : <epoch:  0, iter:   1,240, lr:2.000e-04> G_loss: 4.548e-02 
+23-04-19 05:22:19.350 : <epoch:  0, iter:   1,241, lr:2.000e-04> G_loss: 5.978e-02 
+23-04-19 05:22:23.155 : <epoch:  0, iter:   1,242, lr:2.000e-04> G_loss: 5.415e-02 
+23-04-19 05:22:26.700 : <epoch:  0, iter:   1,243, lr:2.000e-04> G_loss: 4.231e-02 
+23-04-19 05:22:30.690 : <epoch:  0, iter:   1,244, lr:2.000e-04> G_loss: 6.858e-02 
+23-04-19 05:22:34.283 : <epoch:  0, iter:   1,245, lr:2.000e-04> G_loss: 4.386e-02 
+23-04-19 05:22:38.845 : <epoch:  0, iter:   1,246, lr:2.000e-04> G_loss: 3.248e-02 
+23-04-19 05:22:42.745 : <epoch:  0, iter:   1,247, lr:2.000e-04> G_loss: 4.839e-02 
+23-04-19 05:22:46.319 : <epoch:  0, iter:   1,248, lr:2.000e-04> G_loss: 5.852e-02 
+23-04-19 05:22:52.148 : <epoch:  0, iter:   1,249, lr:2.000e-04> G_loss: 5.753e-02 
+23-04-19 05:22:55.976 : <epoch:  0, iter:   1,250, lr:2.000e-04> G_loss: 3.419e-02 
+23-04-19 05:23:00.786 : <epoch:  0, iter:   1,251, lr:2.000e-04> G_loss: 3.454e-02 
+23-04-19 05:23:04.613 : <epoch:  0, iter:   1,252, lr:2.000e-04> G_loss: 3.232e-02 
+23-04-19 05:23:08.387 : <epoch:  0, iter:   1,253, lr:2.000e-04> G_loss: 6.086e-02 
+23-04-19 05:23:12.410 : <epoch:  0, iter:   1,254, lr:2.000e-04> G_loss: 3.449e-02 
+23-04-19 05:23:15.986 : <epoch:  0, iter:   1,255, lr:2.000e-04> G_loss: 6.021e-02 
+23-04-19 05:23:20.616 : <epoch:  0, iter:   1,256, lr:2.000e-04> G_loss: 2.704e-02 
+23-04-19 05:23:35.805 : <epoch:  0, iter:   1,257, lr:2.000e-04> G_loss: 2.798e-02 
+23-04-19 05:23:39.697 : <epoch:  0, iter:   1,258, lr:2.000e-04> G_loss: 5.567e-02 
+23-04-19 05:23:43.584 : <epoch:  0, iter:   1,259, lr:2.000e-04> G_loss: 3.171e-02 
+23-04-19 05:23:48.185 : <epoch:  0, iter:   1,260, lr:2.000e-04> G_loss: 9.087e-02 
+23-04-19 05:23:51.915 : <epoch:  0, iter:   1,261, lr:2.000e-04> G_loss: 3.822e-02 
+23-04-19 05:23:55.754 : <epoch:  0, iter:   1,262, lr:2.000e-04> G_loss: 3.271e-02 
+23-04-19 05:23:59.479 : <epoch:  0, iter:   1,263, lr:2.000e-04> G_loss: 5.555e-02 
+23-04-19 05:24:03.314 : <epoch:  0, iter:   1,264, lr:2.000e-04> G_loss: 7.801e-02 
+23-04-19 05:24:07.853 : <epoch:  0, iter:   1,265, lr:2.000e-04> G_loss: 3.169e-02 
+23-04-19 05:24:11.415 : <epoch:  0, iter:   1,266, lr:2.000e-04> G_loss: 3.612e-02 
+23-04-19 05:24:15.257 : <epoch:  0, iter:   1,267, lr:2.000e-04> G_loss: 3.670e-02 
+23-04-19 05:24:19.209 : <epoch:  0, iter:   1,268, lr:2.000e-04> G_loss: 2.144e-02 
+23-04-19 05:24:23.011 : <epoch:  0, iter:   1,269, lr:2.000e-04> G_loss: 3.660e-02 
+23-04-19 05:24:27.435 : <epoch:  0, iter:   1,270, lr:2.000e-04> G_loss: 4.975e-02 
+23-04-19 05:24:31.176 : <epoch:  0, iter:   1,271, lr:2.000e-04> G_loss: 5.243e-02 
+23-04-19 05:24:34.889 : <epoch:  0, iter:   1,272, lr:2.000e-04> G_loss: 3.512e-02 
+23-04-19 05:24:51.823 : <epoch:  0, iter:   1,273, lr:2.000e-04> G_loss: 4.010e-02 
+23-04-19 05:24:56.245 : <epoch:  0, iter:   1,274, lr:2.000e-04> G_loss: 3.486e-02 
+23-04-19 05:25:00.339 : <epoch:  0, iter:   1,275, lr:2.000e-04> G_loss: 3.607e-02 
+23-04-19 05:25:04.062 : <epoch:  0, iter:   1,276, lr:2.000e-04> G_loss: 6.708e-02 
+23-04-19 05:25:08.015 : <epoch:  0, iter:   1,277, lr:2.000e-04> G_loss: 6.020e-02 
+slurmstepd: error: *** JOB 16038129 ON ng20603 CANCELLED AT 2023-04-19T09:25:08 DUE TO TIME LIMIT ***
