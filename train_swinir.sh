@@ -11,7 +11,6 @@
 
 
 module load python/3.10
-
 module load  StdEnv/2020  cuda cudnn
 module load gcc opencv
 
