@@ -9,8 +9,8 @@
 
   , "path": {
     "root": "SwinITMO_v3"            // "denoising" | "superresolution" | "dejpeg"
-    , "pretrained_netG": "/home/slee67/iTMO_v3/iTMO/models/7400_optimizerG.pth"      // path of pretrained model. We fine-tune X3/X4/X8 models from X2 model, so that `G_optimizer_lr` and `G_scheduler_milestones` can be halved to save time.
-    , "pretrained_netE": "/home/slee67/iTMO_v3/iTMO/models/7400_E.pth"      // path of pretrained model
+    , "pretrained_netG": null      // path of pretrained model. We fine-tune X3/X4/X8 models from X2 model, so that `G_optimizer_lr` and `G_scheduler_milestones` can be halved to save time.
+    , "pretrained_netE": null      // path of pretrained model
   }
 
   , "datasets": {
@@ -73,8 +73,8 @@
     , "G_param_strict": true
     , "E_param_strict": true
 
-    , "checkpoint_test": 50           // for testing
-    , "checkpoint_save": 50           // for saving model
+    , "checkpoint_test": 1000000           // for testing
+    , "checkpoint_save": 16200           // for saving model
     , "checkpoint_print": 1           // for print
   }
 }
