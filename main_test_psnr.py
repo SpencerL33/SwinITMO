@@ -145,7 +145,8 @@ def main(json_path='options/swinir/train_swinir_hdr_v2.json'):
         image_name_ext = os.path.basename(test_data['L_path'][0])
         img_name, ext = os.path.splitext(image_name_ext)
 
-        img_dir = os.path.join(opt['path']['images'], img_name)
+        img_dir = os.path.join(opt['path']['images'], str(current_step))
+        #img_dir = os.path.join(img_dir, img_name)
         util.mkdir(img_dir)
 
         model.feed_data(test_data)
@@ -155,9 +156,6 @@ def main(json_path='options/swinir/train_swinir_hdr_v2.json'):
         L_img = util.tensor2float32(visuals['L'])
         E_img = util.tensor2float32(visuals['E'])
         H_img = util.tensor2float32(visuals['H'])
-        #L_img = visuals['L']
-        #E_img = visuals['E']
-        #H_img = visuals['H']
         
         # -----------------------
         # save estimated image E
@@ -168,14 +166,14 @@ def main(json_path='options/swinir/train_swinir_hdr_v2.json'):
         # -----------------------
         # save input SDR image 
         # -----------------------
-        save_img_path = os.path.join(img_dir, '{:s}_{:d}_input.exr'.format(img_name, current_step))
-        util.exrsave(L_img, save_img_path)
+        #save_img_path = os.path.join(img_dir, '{:s}_{:d}_input.exr'.format(img_name, current_step))
+        #util.exrsave(L_img, save_img_path)
         
         # -----------------------
         # save target HDR image 
         # -----------------------
-        save_img_path = os.path.join(img_dir, '{:s}_{:d}_target.exr'.format(img_name, current_step))
-        util.exrsave(H_img, save_img_path)
+        #save_img_path = os.path.join(img_dir, '{:s}_{:d}_target.exr'.format(img_name, current_step))
+        #util.exrsave(H_img, save_img_path)
 
         # -----------------------
         # calculate PSNR
